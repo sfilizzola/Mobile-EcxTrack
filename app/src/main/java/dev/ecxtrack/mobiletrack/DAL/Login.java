@@ -38,25 +38,18 @@ public class Login extends DataAccessLayerBase {
            oUsu.setCodUsuario(DbReader.getInt("CodUsuario"));
            oUsu.setCPF(DbReader.getString("cpf"));
 
-
-
-            oDoc.setIdDocumento(DbReader.getInt("id_docs"));
+            /*oDoc.setIdDocumento(DbReader.getInt("id_docs"));
             oDoc.setNome(DbReader.getString("nome"));
             oDoc.setFoto(DbReader.getString("foto"));
-            oDoc.setIdentificacao(DbReader.getStringOrNull("identificacao"));
+            oDoc.setIdentificacao(DbReader.getStringOrNull("identificacao"));*/
         }
         DbReader.close();
 
         return oUsu;
-
-
-
-
-
-
     }
 
     private Usuario BuscaUsuarioWebservice(String pNomeUsuario, String pSenha) {
+        return null;
     }
 
     private void InsereUsuarioLocal(Usuario oUsu) {
