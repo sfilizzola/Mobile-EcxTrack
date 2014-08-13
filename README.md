@@ -1,4 +1,3 @@
 Mobile-EcxTrack
 ===============
-
-testing Git
+Projeto do aplicativo móvel ECXTrack.
