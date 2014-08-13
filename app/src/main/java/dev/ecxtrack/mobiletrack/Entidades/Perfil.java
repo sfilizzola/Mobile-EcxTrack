@@ -49,7 +49,7 @@ public class Perfil {
     }
 
     public enum TipoPerfil {
-        Administrativo(1), Gerencial(2), Usuario(3);
+        Administrativo(1), Operacional(2), Usuario(3);
 
         public int valorTipoPerfil;
         TipoPerfil(int valor){

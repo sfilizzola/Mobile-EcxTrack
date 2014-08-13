@@ -15,6 +15,7 @@ public class Usuario {
     private Perfil Perfil;
     private Cliente Cliente;
     private DateTime dtValidade;
+    private String status;
 
     public Usuario() {
     }
@@ -81,6 +82,14 @@ public class Usuario {
 
     public void setDtValidade(DateTime dtValidade) {
         this.dtValidade = dtValidade;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
 /*

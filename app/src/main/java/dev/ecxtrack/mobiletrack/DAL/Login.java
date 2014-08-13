@@ -16,9 +16,16 @@ public class Login extends DataAccessLayerBase {
         oUsu = BuscaUsuarioLocal(pNomeUsuario, pSenha);
         if (oUsu == null)
             oUsu = BuscaUsuarioWebservice(pNomeUsuario, pSenha);
-        if (oUsu != null)
+
+        if (oUsu != null && oUsu.getStatus().equals("OK"))
             InsereUsuarioLocal(oUsu);
+        if (oUsu != null && oUsu.getStatus().equals("NOT"))
+            TrataRetornoUsuario(oUsu.getStatus());
+
         return oUsu;
+    }
+
+    private void TrataRetornoUsuario(String status) {
     }
 
     private Usuario BuscaUsuarioLocal(String pNomeUsuario, String pSenha) {
@@ -36,12 +43,17 @@ public class Login extends DataAccessLayerBase {
 
         while (DbReader.Read()) {
            oUsu.setCodUsuario(DbReader.getInt("CodUsuario"));
-           oUsu.setCPF(DbReader.getString("cpf"));
+           oUsu.setCPF(DbReader.getString("CPF"));
+            oUsu.setSenha(DbReader.getString("Senha"));
+            oUsu.setCodUsuario(DbReader.getInt("CodUsuario"));
 
-            /*oDoc.setIdDocumento(DbReader.getInt("id_docs"));
-            oDoc.setNome(DbReader.getString("nome"));
-            oDoc.setFoto(DbReader.getString("foto"));
-            oDoc.setIdentificacao(DbReader.getStringOrNull("identificacao"));*/
+            //TODO - Faz função para recupperação de cliente
+            //oUsu.setCliente(DbReader.getInt("CPF"));
+
+            //TODO - Faz função para recupperação de perfil
+            //oUsu.setPerfil(DbReader.getIntOrNull("CPF"));
+
+            oUsu.setStatus("Banco");
         }
         DbReader.close();
 

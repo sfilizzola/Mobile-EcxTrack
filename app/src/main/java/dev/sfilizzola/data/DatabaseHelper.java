@@ -14,16 +14,16 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private String TAG = "Garantido";
+    private String TAG = "EcxTrackDatabase";
 
   /**
    * Este é o endereço onde o android salva os bancos de dados criado pela aplicação,
    * /data/data/<namespace da aplicacao>/databases/
    */
-  public static String DBPATH = "/data/data/com.sfilizzola.garantido/databases/";
+  public static String DBPATH = "/data/data/dev.ecxtrack.mobiletrack/databases/";
 
   // Este é o nome do banco de dados que iremos utilizar
-  public static String DBNAME = "garantido.s3db";
+  public static String DBNAME = "EcxTrack.s3db";
   
   public Context context;
   
