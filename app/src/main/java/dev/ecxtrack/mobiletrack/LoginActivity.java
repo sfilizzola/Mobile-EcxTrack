@@ -126,7 +126,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             focusView = mEmailView;
             cancel = true;
         } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
+            mEmailView.setError(getString(R.string.error_invalid_username));
             focusView = mEmailView;
             cancel = true;
         }
@@ -288,7 +288,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             if (success) {
                 finish();
             } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
+                mPasswordView.setError(getString(R.string.error_invalid_password));
                 mPasswordView.requestFocus();
             }
         }

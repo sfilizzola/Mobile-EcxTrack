@@ -19,8 +19,8 @@ public class Login extends DataAccessLayerBase {
 
         if (oUsu != null && oUsu.getStatus().equals("OK"))
             InsereUsuarioLocal(oUsu);
-        if (oUsu != null && oUsu.getStatus().equals("NOT"))
-            TrataRetornoUsuario(oUsu.getStatus());
+        //if (oUsu != null && oUsu.getStatus().equals("NOT"))
+       //     TrataRetornoUsuario(oUsu.getStatus());
 
         return oUsu;
     }
@@ -42,18 +42,17 @@ public class Login extends DataAccessLayerBase {
         DataReader DbReader = DBManager().getDbReader(DbCommand);
 
         while (DbReader.Read()) {
-           oUsu.setCodUsuario(DbReader.getInt("CodUsuario"));
-           oUsu.setCPF(DbReader.getString("CPF"));
+            oUsu.setCodUsuario(DbReader.getInt("CodUsuario"));
+            oUsu.setCPF(DbReader.getString("CPF"));
             oUsu.setSenha(DbReader.getString("Senha"));
             oUsu.setCodUsuario(DbReader.getInt("CodUsuario"));
+            oUsu.setStatus("Banco");
 
             //TODO - Faz função para recupperação de cliente
             //oUsu.setCliente(DbReader.getInt("CPF"));
 
             //TODO - Faz função para recupperação de perfil
             //oUsu.setPerfil(DbReader.getIntOrNull("CPF"));
-
-            oUsu.setStatus("Banco");
         }
         DbReader.close();
 

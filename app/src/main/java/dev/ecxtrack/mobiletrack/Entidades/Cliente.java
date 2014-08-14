@@ -9,6 +9,7 @@ public class Cliente {
     private String NomeCliente;
     private String RazaoSocial;
     private String CNPJ_CPF;
+    private String Status;
 
 
     public Cliente() {
@@ -44,5 +45,13 @@ public class Cliente {
 
     public void setCNPJ_CPF(String CNPJ_CPF) {
         this.CNPJ_CPF = CNPJ_CPF;
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
     }
 }
