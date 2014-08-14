@@ -4,9 +4,10 @@ package dev.sfilizzola.data;
 
 import java.util.Date;
 
+import dev.ecxtrack.mobiletrack.App;
 import dev.sfilizzola.data.DataParameter.DataType;
 import dev.sfilizzola.utils.Log;
-import com.sfilizzola.garantido.App;
+
 import android.database.sqlite.SQLiteDatabase;
 
 public class DataManager {

@@ -3,6 +3,7 @@ package dev.ecxtrack.mobiletrack.DAL;
 //import app.desenvolvimento.ECXSaldo.Entidades.Cartao;
 //import app.desenvolvimento.ECXSaldo.Entidades.RespostaCartao;
 //import app.desenvolvimento.ECXSaldo.Exceptions.CardInvalidException;
+import dev.ecxtrack.mobiletrack.Entidades.Usuario;
 import dev.sfilizzola.utils.Log;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
@@ -16,14 +17,52 @@ import org.xmlpull.v1.XmlPullParserException;
  * Created by Samuel on 07/03/14.
  */
 public class WebService {
-    private final String URL = "http://201.73.60.186/ServicoCard.asmx";
+    private final String URL = "http://www.trackecx.com:8090/EcxTrackAppServices.svc";
     private String SOAP_ACTION;
-    private final String NAMESPACE = "http://www.ecx.com.br/";
+    private final String NAMESPACE = "http://tempuri.org/";
     private String METHOD_NAME;
     private static final String TAG = "WEBSERVICE";
 
     public WebService(){
     }
+
+    public Usuario Login (String pNomeUsuario, String pSenha) throws XmlPullParserException, HttpResponseException, SoapFault {
+
+        SOAP_ACTION = "http://tempuri.org/IEcxTrackAppServices/Login";
+        METHOD_NAME = "Login";
+
+        //Define Objeto SOAP
+        SoapObject soap = new SoapObject(NAMESPACE, METHOD_NAME);
+        soap.addProperty("NomeUsuario", pNomeUsuario);
+        soap.addProperty("Senha", pSenha);
+
+        //cria envelope
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(soap);
+        Log.i(TAG, "Chamando Webservice: " + URL);
+        //Cria HTTPTransport para enviar os dados (SOAP)
+
+        HttpTransportSE httpTransport = new HttpTransportSE(URL);
+        try {
+            httpTransport.call(SOAP_ACTION, envelope);
+        }catch (Exception e){
+            Log.e(TAG, "Erro HttpTransportSE: "+ e.getMessage());
+        }
+        //Recupera Resultado
+        Usuario oUsu = new Usuario();
+
+        SoapObject resposta = (SoapObject)envelope.getResponse();
+
+
+        /*aResp.setCodigoMensagem(resposta.getPropertyAsString(0));
+        aResp.setTextoMensagem(resposta.getPropertyAsString(1));
+        aResp.setNumeroCartao(resposta.getPropertyAsString(2));*/
+
+        return oUsu;
+    }
+}
+
 /*
     public RespostaCartao VerificaCartao(Cartao pCard) throws SoapFault, HttpResponseException, XmlPullParserException {
 
@@ -56,7 +95,7 @@ public class WebService {
         boolean vVerificaObj = Boolean.parseBoolean(envelope.getResponse().toString());
 
         return vVerificaObj;*/
-    }
+
 
 
      /*
@@ -79,44 +118,7 @@ public class WebService {
     </soap:Envelope>
      */
 /*
-    public RespostaCartao Saldo (Cartao pCard) throws XmlPullParserException, HttpResponseException, SoapFault {
 
-        SOAP_ACTION = "http://www.ecx.com.br/validarCartao";
-        METHOD_NAME = "validarCartao";
-
-        //Define Objeto SOAP
-        SoapObject soap = new SoapObject(NAMESPACE, METHOD_NAME);
-        soap.addProperty("numeroCartao", pCard.getNumeroCartao());
-        soap.addProperty("senhaCartao", pCard.getSenhaCartao()+"");
-        soap.addProperty("codSegCartao", pCard.getCodSeguranca()+"");
-        soap.addProperty("nomImpCartao", pCard.getNomeImpresso());
-
-        //cria envelope
-        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-        envelope.dotNet = true;
-        envelope.setOutputSoapObject(soap);
-        Log.i(TAG, "Chamando Webservice: " + URL);
-        //Cria HTTPTransport para enviar os dados (SOAP)
-
-        HttpTransportSE httpTransport = new HttpTransportSE(URL);
-        try {
-            httpTransport.call(SOAP_ACTION, envelope);
-        }catch (Exception e){
-            Log.e(TAG, "Erro HttpTransportSE: "+ e.getMessage());
-        }
-        //Recupera Resultado
-        RespostaCartao aResp = new RespostaCartao();
-
-        SoapObject resposta = (SoapObject)envelope.getResponse();
-
-        aResp.setCodigoMensagem(resposta.getPropertyAsString(0));
-        aResp.setTextoMensagem(resposta.getPropertyAsString(1));
-        aResp.setNumeroCartao(resposta.getPropertyAsString(2));
-        aResp.setSaldoCartao(Double.parseDouble(resposta.getPropertyAsString(3)));
-
-        return aResp;
-    }
-}
 
 /*
 

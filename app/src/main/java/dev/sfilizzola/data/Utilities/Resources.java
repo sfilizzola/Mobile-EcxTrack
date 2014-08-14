@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import com.sfilizzola.garantido.App;
+import dev.ecxtrack.mobiletrack.App;
 
 public class Resources {
 

@@ -25,8 +25,14 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import org.apache.commons.logging.Log;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import dev.ecxtrack.mobiletrack.BLL.Login;
+import dev.ecxtrack.mobiletrack.Exceptions.UserException;
 import dev.ecxtrack.mobiletrack.R;
 
 /**
@@ -121,7 +127,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
         }
 
         // Check for a valid email address.
-        if (TextUtils.isEmpty(email)) {
+        /*if (TextUtils.isEmpty(email)) {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
@@ -129,7 +135,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             mEmailView.setError(getString(R.string.error_invalid_username));
             focusView = mEmailView;
             cancel = true;
-        }
+        }*/
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -261,22 +267,13 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
+            Login login = new Login();
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
+                login.ValidaLogin(mEmail, mPassword);
+            } catch (UserException exception){
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
             }
-
-            // TODO: register the new account here.
+            login.Dispose();
             return true;
         }
 
@@ -286,7 +283,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             showProgress(false);
 
             if (success) {
-                finish();
+                mPasswordView.setError("LOGIN SUCESSO");
+                mPasswordView.requestFocus();
             } else {
                 mPasswordView.setError(getString(R.string.error_invalid_password));
                 mPasswordView.requestFocus();

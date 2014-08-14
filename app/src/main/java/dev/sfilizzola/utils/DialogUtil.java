@@ -1,10 +1,11 @@
 package dev.sfilizzola.utils;
 
-import com.sfilizzola.garantido.App;
 import android.app.Dialog;
 import android.content.Context;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+
+import dev.ecxtrack.mobiletrack.App;
 
 public class DialogUtil 
 {
@@ -25,7 +26,7 @@ public class DialogUtil
             public void run() {
 
                 v.requestFocus();
-                InputMethodManager imm = (InputMethodManager)App.getAppContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) App.getAppContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.showSoftInput(v, InputMethodManager.SHOW_IMPLICIT);
 
             }

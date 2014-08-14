@@ -416,6 +416,11 @@ public class DataReader implements Cursor {
     }
 
     @Override
+    public Uri getNotificationUri() {
+        return pCursor.getNotificationUri();
+    }
+
+    @Override
     public void unregisterContentObserver(ContentObserver observer) {
 
         pCursor.unregisterContentObserver(observer);
