@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentResolver;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
@@ -283,8 +284,9 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             showProgress(false);
 
             if (success) {
-                mPasswordView.setError("LOGIN SUCESSO");
-                mPasswordView.requestFocus();
+                Intent newIntent = new Intent(LoginActivity.this, Main.class);
+                startActivity(newIntent);
+
             } else {
                 mPasswordView.setError(getString(R.string.error_invalid_password));
                 mPasswordView.requestFocus();

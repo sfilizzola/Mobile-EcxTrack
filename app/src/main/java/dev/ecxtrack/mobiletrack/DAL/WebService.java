@@ -54,10 +54,20 @@ public class WebService {
 
         SoapObject resposta = (SoapObject)envelope.getResponse();
 
+        oUsu.setCodUsuario(Integer.parseInt(resposta.getPropertyAsString("CodUsuario")));
+        oUsu.setNome(resposta.getPropertyAsString("Nome"));
+        //oUsu.setCPF(resposta.getPropertyAsString("CPF"));
+        oUsu.setEmail(resposta.getPropertyAsString("Email"));
+        oUsu.setStatus(resposta.getPropertyAsString("Status"));
+        /*
+<xs:element minOccurs="0" name="Cliente" nillable="true" type="tns:Cliente"/>
+<xs:element minOccurs="0" name="DataValidade" nillable="true" type="xs:dateTime"/>
+<xs:element minOccurs="0" name="Perfil" nillable="true" type="tns:Perfil"/>
 
-        /*aResp.setCodigoMensagem(resposta.getPropertyAsString(0));
-        aResp.setTextoMensagem(resposta.getPropertyAsString(1));
-        aResp.setNumeroCartao(resposta.getPropertyAsString(2));*/
+    private Perfil Perfil;
+    private Cliente Cliente;
+    private DateTime dtValidade;
+;*/
 
         return oUsu;
     }
