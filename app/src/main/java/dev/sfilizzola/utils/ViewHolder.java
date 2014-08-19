@@ -8,7 +8,7 @@ import android.widget.TextView;
 /**
  * Classe auxiliar utilizada no processo de definir valores para um TextView, quando utilizamos um ViewHolder
  * 
- * @author regis.oliveira
+ * @author Samuel Filizzola
  */
 public abstract class ViewHolder {
 

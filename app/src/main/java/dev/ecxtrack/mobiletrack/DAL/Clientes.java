@@ -10,6 +10,8 @@ import dev.sfilizzola.data.DataReader;
  */
 public class Clientes extends DataAccessLayerBase {
 
+    private String TAG = "DAL CLIENTES";
+
     public Clientes(){}
 
     public Cliente VerificaCliente  (int pCodCliente){

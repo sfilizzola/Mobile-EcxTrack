@@ -5,7 +5,7 @@ package dev.sfilizzola.data.Utilities;
 /**
  * Classe que encapsula um determinado valor. Utilizada como alternativa para os parametros out, que nao existem no java.
  * 
- * @author regis.oliveira
+ * @author Samuel Filizzola
  * @param <T>
  */
 public class Holder<T> {

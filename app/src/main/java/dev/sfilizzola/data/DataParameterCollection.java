@@ -14,7 +14,7 @@ import dev.sfilizzola.data.DataParameter.DataType;
 /**
  * Representa a cole��o de parametros que � utilizada pelo objeto DbManager
  * 
- * @author regis.oliveira
+ * @author Samuel Filizzola
  */
 public class DataParameterCollection implements List<DataParameter> {
 

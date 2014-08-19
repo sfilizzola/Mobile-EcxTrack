@@ -7,7 +7,7 @@ import dev.sfilizzola.utils.Log;
 /**
  * ArrayList com suporte a eventos ao inserir, excluir ou substituir items
  * 
- * @author regis.oliveira
+ * @author Samuel Filizzola
  * @param <E>
  */
 public class ArrayList<E> extends java.util.ArrayList<E> {

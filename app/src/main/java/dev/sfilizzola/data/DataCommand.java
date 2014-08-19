@@ -15,7 +15,7 @@ import android.database.sqlite.SQLiteDatabase;
 /**
  * Classe que representa um comando que sera executado contra uma base de dados do MySQL
  * 
- * @author regis.oliveira
+ * @author Samuel Filizzola
  */
 public class DataCommand {
 

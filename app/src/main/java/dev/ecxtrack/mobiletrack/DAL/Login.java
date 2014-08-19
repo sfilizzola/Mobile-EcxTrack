@@ -25,10 +25,11 @@ public class Login extends DataAccessLayerBase {
         if (oUsu == null)
             oUsu = BuscaUsuarioWebservice(pNomeUsuario, pSenha);
 
-        /*if (oUsu != null && oUsu.getStatus().equals("OK"))
-            InsereUsuarioLocal(oUsu);*/
-        //if (oUsu != null && oUsu.getStatus().equals("NOT"))
-       //     TrataRetornoUsuario(oUsu.getStatus());
+            if (oUsu != null && oUsu.getStatus().equals("OK"))
+                InsereUsuarioLocal(oUsu);
+
+            //if (oUsu != null && oUsu.getStatus().equals("NOT"))
+            //     TrataRetornoUsuario(oUsu.getStatus());
 
         return oUsu;
     }
@@ -84,5 +85,21 @@ public class Login extends DataAccessLayerBase {
     }
 
     private void InsereUsuarioLocal(Usuario oUsu) {
+
+       /* DataCommand DbCommand = DBManager().GetCommand();
+
+        DbCommand.setCommandText(dev.sfilizzola.data.Utilities.Resources.GetSQL(new String[] {"Login" }, "LoginInsert.sql"));
+
+        DbCommand.Parameters.add(":Nome", DataParameter.DataType.STRING, oUsu.getNome());
+        DbCommand.Parameters.add(":CPF", DataParameter.DataType.STRING, oUsu.getCPF());
+        DbCommand.Parameters.add(":Email", DataParameter.DataType.STRING, oUsu.getEmail());
+        DbCommand.Parameters.add(":Senha", DataParameter.DataType.STRING, oUsu.getSenha());
+        DbCommand.Parameters.add(":CodUsuario", DataParameter.DataType.NUMBER, oUsu.getCodUsuario());
+        DbCommand.Parameters.add(":CodPerfil", DataParameter.DataType.NUMBER, oUsu.getPerfil().getCodPerfil());
+        DbCommand.Parameters.add(":CodCliente", DataParameter.DataType.NUMBER, oUsu.getCliente().getCodCliente());
+        DbCommand.Parameters.add(":dtValidade", DataParameter.DataType.DATETIME, oUsu.getDtValidade());
+
+        DbCommand.ExecuteNonQuery();*/
+
     }
 }

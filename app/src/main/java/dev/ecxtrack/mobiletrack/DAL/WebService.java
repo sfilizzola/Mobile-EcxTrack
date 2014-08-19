@@ -3,6 +3,7 @@ package dev.ecxtrack.mobiletrack.DAL;
 //import app.desenvolvimento.ECXSaldo.Entidades.Cartao;
 //import app.desenvolvimento.ECXSaldo.Entidades.RespostaCartao;
 //import app.desenvolvimento.ECXSaldo.Exceptions.CardInvalidException;
+import dev.ecxtrack.mobiletrack.Entidades.Evento;
 import dev.ecxtrack.mobiletrack.Entidades.Usuario;
 import dev.sfilizzola.utils.Log;
 import org.ksoap2.SoapEnvelope;
@@ -60,18 +61,129 @@ public class WebService {
         oUsu.setEmail(resposta.getPropertyAsString("Email"));
         oUsu.setStatus(resposta.getPropertyAsString("Status"));
         /*
-<xs:element minOccurs="0" name="Cliente" nillable="true" type="tns:Cliente"/>
-<xs:element minOccurs="0" name="DataValidade" nillable="true" type="xs:dateTime"/>
-<xs:element minOccurs="0" name="Perfil" nillable="true" type="tns:Perfil"/>
+    <xs:element minOccurs="0" name="Cliente" nillable="true" type="tns:Cliente"/>
+    <xs:element minOccurs="0" name="DataValidade" nillable="true" type="xs:dateTime"/>
+    <xs:element minOccurs="0" name="Perfil" nillable="true" type="tns:Perfil"/>
 
-    private Perfil Perfil;
-    private Cliente Cliente;
-    private DateTime dtValidade;
-;*/
+        private Perfil Perfil;
+        private Cliente Cliente;
+        private DateTime dtValidade;
+    ;*/
 
         return oUsu;
     }
+
+
+    public Evento UltimaLocalizacaoVeiculo (int pCodVeiculo) throws XmlPullParserException, HttpResponseException, SoapFault{
+        //CodVeiculo
+        SOAP_ACTION = "http://tempuri.org/IEcxTrackAppServices/UltimaLocalizacaoVeiculo";
+        METHOD_NAME = "UltimaLocalizacaoVeiculo";
+
+        //Define Objeto SOAP
+        SoapObject soap = new SoapObject(NAMESPACE, METHOD_NAME);
+        soap.addProperty("CodVeiculo", pCodVeiculo);
+
+        //cria envelope
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(soap);
+        Log.i(TAG, "Chamando Webservice: " + URL);
+        //Cria HTTPTransport para enviar os dados (SOAP)
+
+        HttpTransportSE httpTransport = new HttpTransportSE(URL);
+        try {
+            httpTransport.call(SOAP_ACTION, envelope);
+        }catch (Exception e){
+            Log.e(TAG, "Erro HttpTransportSE: "+ e.getMessage());
+        }
+
+        //Evento de resultado
+        Evento oEvento = new Evento();
+
+        SoapObject resposta = (SoapObject)envelope.getResponse();
+
+        oEvento.setCodCliente(Integer.parseInt(resposta.getPropertyAsString("CodCliente")));
+        oEvento.setCodEquipamento(Integer.parseInt(resposta.getPropertyAsString("CodEquipamento")));
+        oEvento.setCodEvento(Integer.parseInt(resposta.getPropertyAsString("CodEvento")));
+        oEvento.setCodVeiculo(Integer.parseInt(resposta.getPropertyAsString("CodVeiculo")));
+        oEvento.setHodometro(Integer.parseInt(resposta.getPropertyAsString("Hodometro")));
+        oEvento.setLatitude(Long.parseLong(resposta.getPropertyAsString("Latitude")));
+        oEvento.setLongitude(Long.parseLong(resposta.getPropertyAsString("Longitude")));
+
+        return oEvento;
+    }
+
+
+    /*
+        -------------------- RESPOSTA VEICULO --------------------------
+        <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+         <s:Header />
+         <s:Body>
+           <UltimaLocalizacaoVeiculoResponse xmlns="http://tempuri.org/">
+             <UltimaLocalizacaoVeiculoResult xmlns:a="http://schemas.datacontract.org/2004/07/EcxTrackWCF.Entities" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+               <a:CodCliente>10</a:CodCliente>
+               <a:CodEquipamento>5</a:CodEquipamento>
+               <a:CodEvento>1957091</a:CodEvento>
+               <a:CodVeiculo>12</a:CodVeiculo>
+               <a:Hodometro>5064</a:Hodometro>
+               <a:Latitude>-19.935869</a:Latitude>
+               <a:Longitude>-43.944614</a:Longitude>
+             </UltimaLocalizacaoVeiculoResult>
+           </UltimaLocalizacaoVeiculoResponse>
+         </s:Body>
+        </s:Envelope>
+    */
+
+
+
+    /*
+
+    -------------------RESPOSTA LISTA VEICULOS----------------------
+
+    <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+ <s:Header />
+ <s:Body>
+   <VeiculosPorClienteResponse xmlns="http://tempuri.org/">
+     <VeiculosPorClienteResult xmlns:a="http://schemas.datacontract.org/2004/07/EcxTrackWCF.Entities" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+       <a:Veiculo>
+         <a:CodCliente>8</a:CodCliente>
+         <a:CodTipoVeiculo>1</a:CodTipoVeiculo>
+         <a:CodVeiculo>9</a:CodVeiculo>
+         <a:ContatoNome>JOSE FRANCISCO</a:ContatoNome>
+         <a:ContatoTelefone>(31)9295-3100</a:ContatoTelefone>
+         <a:NomeTipoVeiculo>Carro</a:NomeTipoVeiculo>
+         <a:Placa>FAH-0870</a:Placa>
+       </a:Veiculo>
+       <a:Veiculo>
+ <a:CodCliente>8</a:CodCliente>
+         <a:CodTipoVeiculo>1</a:CodTipoVeiculo>
+         <a:CodVeiculo>13</a:CodVeiculo>
+         <a:ContatoNome>CESAR</a:ContatoNome>
+         <a:ContatoTelefone>(31)8411-9333</a:ContatoTelefone>
+         <a:NomeTipoVeiculo>Carro</a:NomeTipoVeiculo>
+         <a:Placa>GSW-5201</a:Placa>
+       </a:Veiculo>
+       <a:Veiculo>
+         <a:CodCliente>8</a:CodCliente>
+         <a:CodTipoVeiculo>1</a:CodTipoVeiculo>
+         <a:CodVeiculo>14</a:CodVeiculo>
+         <a:ContatoNome>FERNANDO</a:ContatoNome>
+         <a:ContatoTelefone>(31)9295-2714</a:ContatoTelefone>
+         <a:NomeTipoVeiculo>Carro</a:NomeTipoVeiculo>
+         <a:Placa>GVU-4470</a:Placa>
+       </a:Veiculo>
+     </VeiculosPorClienteResult>
+   </VeiculosPorClienteResponse>
+ </s:Body>
+</s:Envelope>
+     */
+
+
 }
+
+
+
+
 
 /*
     public RespostaCartao VerificaCartao(Cartao pCard) throws SoapFault, HttpResponseException, XmlPullParserException {
