@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dev.ecxtrack.mobiletrack.BLL.Login;
+import dev.ecxtrack.mobiletrack.Entidades.Usuario;
 import dev.ecxtrack.mobiletrack.Exceptions.UserException;
 import dev.ecxtrack.mobiletrack.R;
 
@@ -42,14 +43,7 @@ import dev.ecxtrack.mobiletrack.R;
  */
 public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
-    /**
+     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
@@ -121,7 +115,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
 
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
+        if (TextUtils.isEmpty(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
@@ -149,15 +143,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
         }
-    }
-    private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
-        return email.contains("@");
-    }
-
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() > 4;
     }
 
     /**
@@ -266,16 +251,19 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
 
-            Login login = new Login();
+           Login login = new Login();
             try {
-                login.ValidaLogin(mEmail, mPassword);
+                Usuario oUsu;
+                oUsu = login.ValidaLogin(mEmail, mPassword);
+                App.setoUsuarioLogado(oUsu);
+                login.Dispose();
+                return true;
             } catch (UserException exception){
-
+                login.Dispose();
+                return false;
             }
-            login.Dispose();
-            return true;
+
         }
 
         @Override
@@ -284,6 +272,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             showProgress(false);
 
             if (success) {
+                //TODO - Se primeiro usuário grava usuário no banco.
                 Intent newIntent = new Intent(LoginActivity.this, Main.class);
                 startActivity(newIntent);
 
