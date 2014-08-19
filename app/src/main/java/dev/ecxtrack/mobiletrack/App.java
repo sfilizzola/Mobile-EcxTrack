@@ -21,6 +21,8 @@ import android.content.Context;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import dev.ecxtrack.mobiletrack.Entidades.Usuario;
+
 
 /**
  * @author samuel.filizzola
@@ -81,6 +83,8 @@ public class App extends Application {
 
     // Verifica se pedido ja teve propriedades setada
     private static Boolean PedidoConfigurado = false;
+
+    private static Usuario oUsuarioLogado;
 
 
     /**
@@ -320,4 +324,11 @@ public class App extends Application {
         return instanceLoaded;
     }
 
+    public static Usuario getoUsuarioLogado() {
+        return oUsuarioLogado;
+    }
+
+    public static void setoUsuarioLogado(Usuario oUsuarioLogado) {
+        App.oUsuarioLogado = oUsuarioLogado;
+    }
 }
