@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
@@ -21,20 +22,20 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.List;
+
+import dev.ecxtrack.mobiletrack.BLL.Veiculos;
+import dev.ecxtrack.mobiletrack.Entidades.Veiculo;
+
 
 public class Main extends FragmentActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-    /**
-     * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
-     */
+    //Fragment managing the behaviors, interactions and presentation of the navigation drawer.
     private NavigationDrawerFragment mNavigationDrawerFragment;
-
-
     private GoogleMap mMap;
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
+
+    // Used to store the last screen title. For use in {@link #restoreActionBar()}.
     private CharSequence mTitle;
 
     @Override
@@ -62,28 +63,6 @@ public class Main extends FragmentActivity
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                 .commit();*/
     }
-
-    public void onSectionAttached(int number) {
-        switch (number) {
-            case 1:
-                mTitle = getString(R.string.title_section1);
-                break;
-            case 2:
-                mTitle = getString(R.string.title_section2);
-                break;
-            case 3:
-                mTitle = getString(R.string.title_section3);
-                break;
-        }
-    }
-
-    public void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -114,6 +93,27 @@ public class Main extends FragmentActivity
     protected void onResume() {
         super.onResume();
         setUpMapIfNeeded();
+    }
+
+    public void onSectionAttached(int number) {
+        switch (number) {
+            case 1:
+                mTitle = getString(R.string.title_section1);
+                break;
+            case 2:
+                mTitle = getString(R.string.title_section2);
+                break;
+            case 3:
+                mTitle = getString(R.string.title_section3);
+                break;
+        }
+    }
+
+    public void restoreActionBar() {
+        ActionBar actionBar = getActionBar();
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        actionBar.setDisplayShowTitleEnabled(true);
+        actionBar.setTitle(mTitle);
     }
 
     private void setUpMapIfNeeded() {
@@ -177,5 +177,24 @@ public class Main extends FragmentActivity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
+
+    public class VeiculosLoginTask extends AsyncTask<Integer, Void, List<Veiculo>>{
+
+        @Override
+        protected List<Veiculo> doInBackground(Integer... params) {
+            List<Veiculo> vretVal;
+            Veiculos BLLVeiculos = new Veiculos();
+            vretVal = BLLVeiculos.VeiculosPorUsuario(params[0]);
+            BLLVeiculos.Dispose();
+            return vretVal;
+        }
+
+        @Override
+        protected void onPostExecute(List<Veiculo> result) {
+
+        }
+
+    }
+
 
 }

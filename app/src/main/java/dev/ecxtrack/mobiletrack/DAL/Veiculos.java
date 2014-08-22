@@ -77,5 +77,42 @@ public class Veiculos extends DataAccessLayerBase{
         return null;
     }
 
+    public void InsereVeiculosBanco (List<Veiculo> pLista){
+        for (Veiculo carro: pLista){
+            InsereVeiculoBanco(carro);
+        }
+    }
+
+    private void InsereVeiculoBanco (Veiculo pVeiculo){
+
+        DataCommand DbCommand = DBManager().GetCommand();
+
+        DbCommand.setCommandText(dev.sfilizzola.data.Utilities.Resources.GetSQL(new String[] {"Veiculos" }, "VeiculoInsert.sql"));
+
+        DbCommand.Parameters.add(":Placa", DataParameter.DataType.STRING, pVeiculo.getPlaca());
+        DbCommand.Parameters.add(":TipoVeiculoNome", DataParameter.DataType.STRING, pVeiculo.getTipoVeiculoNome());
+        DbCommand.Parameters.add(":CodVeiculo", DataParameter.DataType.NUMBER, pVeiculo.getCodVeiculo());
+        DbCommand.Parameters.add(":ContatoNome", DataParameter.DataType.STRING, pVeiculo.getContatoNome());
+        DbCommand.Parameters.add(":ContatoTelefone", DataParameter.DataType.STRING, pVeiculo.getContatoTelefone());
+        DbCommand.Parameters.add(":CodCliente", DataParameter.DataType.NUMBER, pVeiculo.getCodCliente());
+
+        DbCommand.ExecuteNonQuery();
+    }
+
+
+    public List<Veiculo> BuscaVeiculosWebservice(Integer pCodUsuario){
+        WebService ws = new WebService();
+        try {
+            return ws.VeiculosPorCliente(pCodUsuario);
+        } catch (XmlPullParserException e) {
+            Log.e(TAG, e.getMessage());
+        } catch (HttpResponseException e) {
+            Log.e(TAG, e.getMessage());
+        } catch (SoapFault soapFault) {
+            Log.e(TAG, soapFault.getMessage());
+        }
+        return null;
+    }
+
 
 }

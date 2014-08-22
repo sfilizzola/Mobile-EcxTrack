@@ -5,6 +5,9 @@ package dev.ecxtrack.mobiletrack.DAL;
 //import app.desenvolvimento.ECXSaldo.Exceptions.CardInvalidException;
 import dev.ecxtrack.mobiletrack.Entidades.Evento;
 import dev.ecxtrack.mobiletrack.Entidades.Usuario;
+import dev.ecxtrack.mobiletrack.Entidades.Veiculo;
+import dev.sfilizzola.data.Utilities.ArrayAdapterFilizzola;
+import dev.sfilizzola.utils.ArrayList;
 import dev.sfilizzola.utils.Log;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
@@ -13,6 +16,8 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpResponseException;
 import org.ksoap2.transport.HttpTransportSE;
 import org.xmlpull.v1.XmlPullParserException;
+
+import java.util.List;
 
 /**
  * Created by Samuel on 07/03/14.
@@ -24,8 +29,7 @@ public class WebService {
     private String METHOD_NAME;
     private static final String TAG = "WEBSERVICE";
 
-    public WebService(){
-    }
+    public WebService(){ }
 
     public Usuario Login (String pNomeUsuario, String pSenha) throws XmlPullParserException, HttpResponseException, SoapFault {
 
@@ -73,7 +77,6 @@ public class WebService {
         return oUsu;
     }
 
-
     public Evento UltimaLocalizacaoVeiculo (int pCodVeiculo) throws XmlPullParserException, HttpResponseException, SoapFault{
         //CodVeiculo
         SOAP_ACTION = "http://tempuri.org/IEcxTrackAppServices/UltimaLocalizacaoVeiculo";
@@ -111,6 +114,42 @@ public class WebService {
         oEvento.setLongitude(Long.parseLong(resposta.getPropertyAsString("Longitude")));
 
         return oEvento;
+    }
+
+    public List<Veiculo> VeiculosPorCliente (int pCodusuario) throws XmlPullParserException, HttpResponseException, SoapFault {
+        return VeiculosPorCliente (pCodusuario, false);
+    }
+
+    public List<Veiculo> VeiculosPorCliente (int pCodusuario, boolean IsClienteAdicional) throws XmlPullParserException, HttpResponseException, SoapFault {
+        //CodVeiculo
+        SOAP_ACTION = "http://tempuri.org/IEcxTrackAppServices/VeiculosPorCliente";
+        METHOD_NAME = "VeiculosPorCliente";
+
+        //Define Objeto SOAP
+        SoapObject soap = new SoapObject(NAMESPACE, METHOD_NAME);
+        soap.addProperty("CodUsuario", pCodusuario);
+        soap.addProperty("buscaClienteAdicional", IsClienteAdicional);
+
+        //cria envelope
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(soap);
+        Log.i(TAG, "Chamando Webservice: " + URL);
+        //Cria HTTPTransport para enviar os dados (SOAP)
+
+        HttpTransportSE httpTransport = new HttpTransportSE(URL);
+        try {
+            httpTransport.call(SOAP_ACTION, envelope);
+        }catch (Exception e){
+            Log.e(TAG, "Erro HttpTransportSE: "+ e.getMessage());
+        }
+
+
+        List<Veiculo> vRet = new ArrayList<Veiculo>();
+
+        SoapObject resposta = (SoapObject)envelope.getResponse();
+
+        return vRet;
     }
 
 
