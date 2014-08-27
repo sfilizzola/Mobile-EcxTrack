@@ -58,6 +58,8 @@ public class Veiculos extends DataAccessLayerBase{
 
         }DbReader.close();
 
+        if (vRetVal.size() == 0)
+            vRetVal = BuscaVeiculosWebservice(pCodUsuario);
 
         return vRetVal;
     }

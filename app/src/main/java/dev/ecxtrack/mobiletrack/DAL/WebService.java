@@ -48,22 +48,28 @@ public class WebService {
         Log.i(TAG, "Chamando Webservice: " + URL);
         //Cria HTTPTransport para enviar os dados (SOAP)
 
+        //Recupera Resultado
+        Usuario oUsu = null;
+
         HttpTransportSE httpTransport = new HttpTransportSE(URL);
         try {
             httpTransport.call(SOAP_ACTION, envelope);
+
+            SoapObject resposta = (SoapObject)envelope.getResponse();
+
+            oUsu = new Usuario();
+            oUsu.setCodUsuario(Integer.parseInt(resposta.getPropertyAsString("CodUsuario")));
+            oUsu.setNome(resposta.getPropertyAsString("Nome"));
+            //oUsu.setCPF(resposta.getPropertyAsString("CPF"));
+            oUsu.setEmail(resposta.getPropertyAsString("Email"));
+            oUsu.setStatus(resposta.getPropertyAsString("Status"));
+
+
         }catch (Exception e){
             Log.e(TAG, "Erro HttpTransportSE: "+ e.getMessage());
         }
-        //Recupera Resultado
-        Usuario oUsu = new Usuario();
 
-        SoapObject resposta = (SoapObject)envelope.getResponse();
 
-        oUsu.setCodUsuario(Integer.parseInt(resposta.getPropertyAsString("CodUsuario")));
-        oUsu.setNome(resposta.getPropertyAsString("Nome"));
-        //oUsu.setCPF(resposta.getPropertyAsString("CPF"));
-        oUsu.setEmail(resposta.getPropertyAsString("Email"));
-        oUsu.setStatus(resposta.getPropertyAsString("Status"));
         /*
     <xs:element minOccurs="0" name="Cliente" nillable="true" type="tns:Cliente"/>
     <xs:element minOccurs="0" name="DataValidade" nillable="true" type="xs:dateTime"/>
@@ -146,9 +152,20 @@ public class WebService {
 
 
         List<Veiculo> vRet = new ArrayList<Veiculo>();
+        SoapObject result = (SoapObject)envelope.getResponse();
 
-        SoapObject resposta = (SoapObject)envelope.getResponse();
+        for(int i= 0; i< result.getPropertyCount(); i++){
 
+            Veiculo oVei = new Veiculo();
+
+            SoapObject object = (SoapObject)result.getProperty(i);
+
+            oVei.setPlaca(object.getPropertyAsString("Placa"));
+            oVei.setCodVeiculo(Integer.parseInt(object.getPropertyAsString("CodVeiculo")));
+
+            vRet.add(oVei);
+
+        }
         return vRet;
     }
 

@@ -21,7 +21,20 @@ public class Veiculos implements IDisposable {
         return oVeiculoDAL.BuscaVeiculos(pCodusuario);
     }
 
+    public String[] PlacasString (List<Veiculo> pLista){
 
+        int vQuantidade = pLista.size();
+        int cont = 0;
+
+        String[] vret = new String[vQuantidade];
+
+        for (Veiculo item : pLista){
+            vret[cont] = item.getPlaca();
+            cont++;
+        }
+
+        return vret;
+    }
 
     @Override
     public void Dispose() {

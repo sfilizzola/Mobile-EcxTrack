@@ -11,6 +11,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Locale;
 
 import org.joda.time.DateTime;
@@ -22,6 +23,8 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import dev.ecxtrack.mobiletrack.Entidades.Usuario;
+import dev.ecxtrack.mobiletrack.Entidades.Veiculo;
+import dev.sfilizzola.utils.ArrayList;
 
 
 /**
@@ -85,6 +88,8 @@ public class App extends Application {
     private static Boolean PedidoConfigurado = false;
 
     private static Usuario oUsuarioLogado;
+
+    private static List<Veiculo> oVeiculosAtuais;
 
 
     /**
@@ -330,5 +335,15 @@ public class App extends Application {
 
     public static void setoUsuarioLogado(Usuario oUsuarioLogado) {
         App.oUsuarioLogado = oUsuarioLogado;
+    }
+
+    public static List<Veiculo> getoVeiculosAtuais() {
+        if (oVeiculosAtuais == null)
+            oVeiculosAtuais = new ArrayList<Veiculo>();
+        return oVeiculosAtuais;
+    }
+
+    public static void setoVeiculosAtuais(List<Veiculo> oVeiculosAtuais) {
+        App.oVeiculosAtuais = oVeiculosAtuais;
     }
 }

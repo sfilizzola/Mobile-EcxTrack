@@ -7,6 +7,13 @@
     android:layout_height="match_parent"
     tools:context="dev.ecxtrack.mobiletrack.Main">
 
+    <ProgressBar
+        android:id="@+id/main_login_progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:visibility="gone"/>
     <!-- As the main content view, the view below consumes the entire
          space available using match_parent in both dimensions. -->
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"

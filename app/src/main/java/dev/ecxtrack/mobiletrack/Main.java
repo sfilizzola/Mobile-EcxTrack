@@ -1,11 +1,15 @@
 package dev.ecxtrack.mobiletrack;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Activity;
 
 import android.app.ActionBar;
 import android.app.Fragment;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
@@ -38,21 +42,38 @@ public class Main extends FragmentActivity
     // Used to store the last screen title. For use in {@link #restoreActionBar()}.
     private CharSequence mTitle;
 
+    private View mProgressView;
+    private View mMainFragemntView;
+    private View mDrawerFragemntView;
+
+    private VeiculosLoginTask mVeicInitTask;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+        mProgressView = findViewById(R.id.main_login_progress);
+        mMainFragemntView = findViewById(R.id.map);
+        mDrawerFragemntView = findViewById(R.id.navigation_drawer);
 
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
+        ObtemDadosDaTelaPrincipal();
 
-        setUpMapIfNeeded();
+    }
+
+    private void ObtemDadosDaTelaPrincipal() {
+        if (mVeicInitTask != null){return;}
+
+        showProgress(true);
+        mVeicInitTask = new VeiculosLoginTask(App.getoUsuarioLogado().getCodUsuario());
+        mVeicInitTask.execute();
+
+        //TODO - ObterPlacas
+        //TODO - Preencher placas no menu lateral
+        //TODO - Carregar Mapa
+        //TODO - Setar localização atual do usuário / ultima posição clicada no mapa
+        //TODO - Clique na placa buscar a ultiam posição e depois animar o mapa.
     }
 
     @Override
@@ -66,13 +87,15 @@ public class Main extends FragmentActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main, menu);
-            restoreActionBar();
-            return true;
+        if (mNavigationDrawerFragment != null) {
+            if (!mNavigationDrawerFragment.isDrawerOpen()) {
+                // Only show items in the action bar relevant to this screen
+                // if the drawer is not showing. Otherwise, let the drawer
+                // decide what to show in the action bar.
+                getMenuInflater().inflate(R.menu.main, menu);
+                restoreActionBar();
+                return true;
+            }
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -138,6 +161,51 @@ public class Main extends FragmentActivity
         mMap.addMarker(new MarkerOptions().position(teste).title("Marcador"));
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    public void showProgress(final boolean show) {
+        // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
+        // for very easy animations. If available, use these APIs to fade-in
+        // the progress spinner.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+            int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+
+
+            mDrawerFragemntView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mDrawerFragemntView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mDrawerFragemntView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mMainFragemntView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mMainFragemntView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 0 : 1).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mMainFragemntView.setVisibility(show ? View.GONE : View.VISIBLE);
+                }
+            });
+
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mProgressView.animate().setDuration(shortAnimTime).alpha(
+                    show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+                }
+            });
+        } else {
+            // The ViewPropertyAnimator APIs are not available, so simply show
+            // and hide the relevant UI components.
+            mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
+            mMainFragemntView.setVisibility(show ? View.GONE : View.VISIBLE);
+            mDrawerFragemntView.setVisibility(show ? View.GONE : View.VISIBLE);
+        }
+    }
+
+
     /**
      * A placeholder fragment containing a simple view.
      */
@@ -178,22 +246,41 @@ public class Main extends FragmentActivity
         }
     }
 
-    public class VeiculosLoginTask extends AsyncTask<Integer, Void, List<Veiculo>>{
+    public class VeiculosLoginTask extends AsyncTask<Void, Void, List<Veiculo>>{
+
+        private final int mCodUsu;
+
+        VeiculosLoginTask(int pCodusu) {
+            mCodUsu = pCodusu;
+        }
 
         @Override
-        protected List<Veiculo> doInBackground(Integer... params) {
+        protected List<Veiculo> doInBackground(Void... params) {
             List<Veiculo> vretVal;
             Veiculos BLLVeiculos = new Veiculos();
-            vretVal = BLLVeiculos.VeiculosPorUsuario(params[0]);
+            vretVal = BLLVeiculos.VeiculosPorUsuario(mCodUsu);
             BLLVeiculos.Dispose();
             return vretVal;
         }
 
         @Override
         protected void onPostExecute(List<Veiculo> result) {
-
+            App.setoVeiculosAtuais(result);
+            MontaMenuVeiculos();
+            showProgress(false);
         }
 
+    }
+
+    private void MontaMenuVeiculos() {
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mTitle = getTitle();
+
+        // Set up the drawer.
+        mNavigationDrawerFragment.setUp(
+                R.id.navigation_drawer,
+                (DrawerLayout) findViewById(R.id.drawer_layout));
     }
 
 
