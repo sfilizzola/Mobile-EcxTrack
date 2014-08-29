@@ -272,8 +272,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             showProgress(false);
 
             if (success) {
-                //TODO - Se primeiro usuário grava usuário no banco.
-                Intent newIntent = new Intent(LoginActivity.this, Main.class);
+                Intent newIntent = new Intent(LoginActivity.this, LoadingAct.class);
                 startActivity(newIntent);
 
             } else {

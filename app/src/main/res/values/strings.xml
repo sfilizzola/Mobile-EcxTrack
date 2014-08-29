@@ -11,5 +11,7 @@
     <string name="action_example">Ação</string>
     <string name="action_settings">Configurações</string>
     <string name="title_activity_map">Map</string>
+    <string name="title_activity_loading">LoadingAct</string>
+    <string name="app_loading">Carregando...</string>
 
 </resources>

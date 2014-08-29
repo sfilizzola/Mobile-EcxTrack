@@ -46,8 +46,6 @@ public class Main extends FragmentActivity
     private View mMainFragemntView;
     private View mDrawerFragemntView;
 
-    private VeiculosLoginTask mVeicInitTask;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,22 +56,15 @@ public class Main extends FragmentActivity
         mMainFragemntView = findViewById(R.id.map);
         mDrawerFragemntView = findViewById(R.id.navigation_drawer);
 
-        ObtemDadosDaTelaPrincipal();
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getFragmentManager().findFragmentById(R.id.navigation_drawer);
+        mTitle = getTitle();
 
-    }
+        // Set up the drawer.
+        mNavigationDrawerFragment.setUp(
+                R.id.navigation_drawer,
+                (DrawerLayout) findViewById(R.id.drawer_layout));
 
-    private void ObtemDadosDaTelaPrincipal() {
-        if (mVeicInitTask != null){return;}
-
-        showProgress(true);
-        mVeicInitTask = new VeiculosLoginTask(App.getoUsuarioLogado().getCodUsuario());
-        mVeicInitTask.execute();
-
-        //TODO - ObterPlacas
-        //TODO - Preencher placas no menu lateral
-        //TODO - Carregar Mapa
-        //TODO - Setar localização atual do usuário / ultima posição clicada no mapa
-        //TODO - Clique na placa buscar a ultiam posição e depois animar o mapa.
     }
 
     @Override
@@ -246,42 +237,8 @@ public class Main extends FragmentActivity
         }
     }
 
-    public class VeiculosLoginTask extends AsyncTask<Void, Void, List<Veiculo>>{
 
-        private final int mCodUsu;
 
-        VeiculosLoginTask(int pCodusu) {
-            mCodUsu = pCodusu;
-        }
-
-        @Override
-        protected List<Veiculo> doInBackground(Void... params) {
-            List<Veiculo> vretVal;
-            Veiculos BLLVeiculos = new Veiculos();
-            vretVal = BLLVeiculos.VeiculosPorUsuario(mCodUsu);
-            BLLVeiculos.Dispose();
-            return vretVal;
-        }
-
-        @Override
-        protected void onPostExecute(List<Veiculo> result) {
-            App.setoVeiculosAtuais(result);
-            MontaMenuVeiculos();
-            showProgress(false);
-        }
-
-    }
-
-    private void MontaMenuVeiculos() {
-        mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
-
-        // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
-                R.id.navigation_drawer,
-                (DrawerLayout) findViewById(R.id.drawer_layout));
-    }
 
 
 }

@@ -4,6 +4,7 @@ package dev.ecxtrack.mobiletrack;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Context;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -20,9 +21,14 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import dev.ecxtrack.mobiletrack.BLL.Veiculos;
+import dev.ecxtrack.mobiletrack.Entidades.Veiculo;
+import dev.sfilizzola.data.Utilities.ArrayAdapterFilizzola;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -92,11 +98,6 @@ public class NavigationDrawerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
 
-        Veiculos oVeiculosBLL = new Veiculos();
-        String[] Placas = oVeiculosBLL.PlacasString(App.getoVeiculosAtuais());
-        oVeiculosBLL.Dispose();
-
-
         mDrawerListView = (ListView) inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -105,12 +106,7 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
-                getActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_activated_1,
-                android.R.id.text1,
-                Placas
-                ));
+        mDrawerListView.setAdapter(new VeiculoListAdapter(getActionBar().getThemedContext(), R.layout.veiculos_list_row, App.getoVeiculosAtuais()));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
     }
@@ -284,4 +280,34 @@ public class NavigationDrawerFragment extends Fragment {
          */
         void onNavigationDrawerItemSelected(int position);
     }
+
+    private class VeiculoListAdapter extends ArrayAdapterFilizzola<Veiculo>{
+
+        private VeiculoListAdapter(Context context, int textViewResourceId, List<Veiculo> veiculos) {
+            super(context, textViewResourceId, veiculos);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+
+            View v = convertView;
+
+            if (v == null) {
+                v = LayoutInflater.from(getContext()).inflate(
+                        R.layout.veiculos_list_row, null);
+            }
+
+            Veiculo oVeiculo = this.items.get(position);
+
+            TextView txtPlaca = (TextView) v.findViewById(R.id.txtPlaca);
+
+            // Seta dados
+            if (txtPlaca != null)
+                txtPlaca.setText(oVeiculo.getPlaca());
+
+            return v;
+        }
+    }
 }
+
+
