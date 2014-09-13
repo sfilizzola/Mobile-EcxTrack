@@ -297,7 +297,7 @@ public class NavigationDrawerFragment extends Fragment {
                         R.layout.veiculos_list_row, null);
             }
 
-            Veiculo oVeiculo = this.items.get(position);
+            final Veiculo oVeiculo = this.items.get(position);
 
             TextView txtPlaca = (TextView) v.findViewById(R.id.txtPlaca);
 

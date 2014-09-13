@@ -2,6 +2,7 @@ package dev.ecxtrack.mobiletrack.BLL;
 
 import java.util.List;
 
+import dev.ecxtrack.mobiletrack.Entidades.Evento;
 import dev.ecxtrack.mobiletrack.Entidades.Veiculo;
 
 /**
@@ -21,20 +22,9 @@ public class Veiculos implements IDisposable {
         return oVeiculoDAL.BuscaVeiculos(pCodusuario);
     }
 
-    public String[] PlacasString (List<Veiculo> pLista){
-
-        int vQuantidade = pLista.size();
-        int cont = 0;
-
-        String[] vret = new String[vQuantidade];
-
-        for (Veiculo item : pLista){
-            vret[cont] = item.getPlaca();
-            cont++;
-        }
-
-        return vret;
-    }
+   public Evento UltimoEventoVeiculo (Veiculo pVeiculo){
+       return oVeiculoDAL.BuscaUltimaPosicao(pVeiculo.getCodVeiculo());
+   }
 
     @Override
     public void Dispose() {

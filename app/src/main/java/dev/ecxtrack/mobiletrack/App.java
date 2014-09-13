@@ -22,6 +22,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import dev.ecxtrack.mobiletrack.Entidades.Evento;
 import dev.ecxtrack.mobiletrack.Entidades.Usuario;
 import dev.ecxtrack.mobiletrack.Entidades.Veiculo;
 import dev.sfilizzola.utils.ArrayList;
@@ -91,6 +92,10 @@ public class App extends Application {
 
     private static List<Veiculo> oVeiculosAtuais;
 
+    private static Evento oEventoAtual;
+
+    private static Veiculo oVeiculoSelecionado;
+
 
     /**
      * Obtem o contexto no qual a aplicacao esta sendo executada
@@ -101,6 +106,8 @@ public class App extends Application {
 
         return appContext;
     }
+
+
 
     @Override
     public void onCreate() {
@@ -345,5 +352,21 @@ public class App extends Application {
 
     public static void setoVeiculosAtuais(List<Veiculo> oVeiculosAtuais) {
         App.oVeiculosAtuais = oVeiculosAtuais;
+    }
+
+    public static Evento getoEventoAtual() {
+        return oEventoAtual;
+    }
+
+    public static void setoEventoAtual(Evento oEventoAtual) {
+        App.oEventoAtual = oEventoAtual;
+    }
+
+    public static Veiculo getoVeiculoSelecionado() {
+        return oVeiculoSelecionado;
+    }
+
+    public static void setoVeiculoSelecionado(Veiculo oVeiculoSelecionado) {
+        App.oVeiculoSelecionado = oVeiculoSelecionado;
     }
 }

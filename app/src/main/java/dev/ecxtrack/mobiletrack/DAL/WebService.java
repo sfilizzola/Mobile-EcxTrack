@@ -111,14 +111,16 @@ public class WebService {
 
         SoapObject resposta = (SoapObject)envelope.getResponse();
 
-        oEvento.setCodCliente(Integer.parseInt(resposta.getPropertyAsString("CodCliente")));
-        oEvento.setCodEquipamento(Integer.parseInt(resposta.getPropertyAsString("CodEquipamento")));
-        oEvento.setCodEvento(Integer.parseInt(resposta.getPropertyAsString("CodEvento")));
-        oEvento.setCodVeiculo(Integer.parseInt(resposta.getPropertyAsString("CodVeiculo")));
-        oEvento.setHodometro(Integer.parseInt(resposta.getPropertyAsString("Hodometro")));
-        oEvento.setLatitude(Long.parseLong(resposta.getPropertyAsString("Latitude")));
-        oEvento.setLongitude(Long.parseLong(resposta.getPropertyAsString("Longitude")));
-
+        if (resposta != null)
+        {
+            oEvento.setCodCliente(Integer.parseInt(resposta.getPropertyAsString("CodCliente")));
+            oEvento.setCodEquipamento(Integer.parseInt(resposta.getPropertyAsString("CodEquipamento")));
+            oEvento.setCodEvento(Integer.parseInt(resposta.getPropertyAsString("CodEvento")));
+            oEvento.setCodVeiculo(Integer.parseInt(resposta.getPropertyAsString("CodVeiculo")));
+            oEvento.setHodometro(Integer.parseInt(resposta.getPropertyAsString("Hodometro")));
+            oEvento.setLatitude(Double.parseDouble(resposta.getPropertyAsString("Latitude")));
+            oEvento.setLongitude(Double.parseDouble(resposta.getPropertyAsString("Longitude")));
+        }
         return oEvento;
     }
 

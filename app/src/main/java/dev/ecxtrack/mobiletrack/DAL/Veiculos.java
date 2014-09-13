@@ -1,7 +1,4 @@
 package dev.ecxtrack.mobiletrack.DAL;
-
-import android.provider.ContactsContract;
-
 import org.ksoap2.SoapFault;
 import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;

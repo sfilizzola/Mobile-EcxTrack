@@ -5,69 +5,91 @@ package dev.ecxtrack.mobiletrack.Entidades;
  */
 public class Evento {
 
-    private int CodCliente;
-    private int CodEquipamento;
-    private int CodEvento;
-    private int CodVeiculo;
-    private int Hodometro;
-    private long Latitude;
-    private long Longitude;
+    private Integer CodCliente;
+    private Integer CodEquipamento;
+    private Integer CodEvento;
+    private Integer CodVeiculo;
+    private Integer Hodometro;
+    private Double Latitude;
+    private Double Longitude;
 
-    public Evento(){}
+    public Evento(){
+        CodCliente = 0;
+        CodEquipamento = 0;
+        CodEvento = 0;
+        CodVeiculo = 0;
+        Hodometro = 0;
+        Latitude = 0.0;
+        Longitude = 0.0;
+    }
 
-    public int getCodCliente() {
+    public Integer getCodCliente() {
         return CodCliente;
     }
 
-    public void setCodCliente(int codCliente) {
+    public void setCodCliente(Integer codCliente) {
+        if (codCliente == null)
+            codCliente = 0;
         CodCliente = codCliente;
     }
 
-    public int getCodEquipamento() {
+    public Integer getCodEquipamento() {
         return CodEquipamento;
     }
 
-    public void setCodEquipamento(int codEquipamento) {
+    public void setCodEquipamento(Integer codEquipamento) {
+        if (codEquipamento == null)
+            codEquipamento = 0;
         CodEquipamento = codEquipamento;
     }
 
-    public int getCodEvento() {
+    public Integer getCodEvento() {
         return CodEvento;
     }
 
-    public void setCodEvento(int codEvento) {
+    public void setCodEvento(Integer codEvento) {
+        if (codEvento == null)
+            codEvento = 0;
         CodEvento = codEvento;
     }
 
-    public int getCodVeiculo() {
+    public Integer getCodVeiculo() {
         return CodVeiculo;
     }
 
-    public void setCodVeiculo(int codVeiculo) {
+    public void setCodVeiculo(Integer codVeiculo) {
+        if (codVeiculo == null)
+            codVeiculo = 0;
         CodVeiculo = codVeiculo;
     }
 
-    public int getHodometro() {
+    public Integer getHodometro() {
         return Hodometro;
     }
 
-    public void setHodometro(int hodometro) {
+    public void setHodometro(Integer hodometro) {
+        if (hodometro == null)
+            hodometro = 0;
         Hodometro = hodometro;
     }
 
-    public long getLatitude() {
+    public Double getLatitude() {
         return Latitude;
     }
 
-    public void setLatitude(long latitude) {
+    public void setLatitude(Double latitude) {
+        if (latitude == null)
+            latitude = 0.0;
         Latitude = latitude;
     }
 
-    public long getLongitude() {
+    public Double getLongitude() {
         return Longitude;
     }
 
-    public void setLongitude(long longitude) {
+    public void setLongitude(Double longitude) {
+        if (longitude == null)
+            longitude = 0.0;
         Longitude = longitude;
     }
 }
