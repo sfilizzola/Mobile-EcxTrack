@@ -25,7 +25,8 @@
         </activity>
         <activity
             android:name=".Main"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".Map"
@@ -42,7 +43,8 @@
         <activity
             android:name=".LoadingAct"
             android:label="@string/title_activity_loading"
-            android:theme="@android:style/Theme.Holo.Light.NoActionBar">
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+            android:noHistory="true">
         </activity>
     </application>
 

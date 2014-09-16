@@ -2,7 +2,11 @@ package dev.ecxtrack.mobiletrack;
 
 import android.app.ActionBar;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -11,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.DatePicker;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -18,8 +24,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.joda.time.format.DateTimeFormatter;
+
+import java.util.Calendar;
 
 import dev.ecxtrack.mobiletrack.BLL.Veiculos;
 import dev.ecxtrack.mobiletrack.Entidades.Evento;
@@ -63,8 +73,6 @@ public class Main extends FragmentActivity
     public void onNavigationDrawerItemSelected(int position) {
 
         progress = ProgressDialog.show(this, "Carregando posição", "Aguarde...", true);
-
-
         Veiculo oVeiculoSelecionado = App.getoVeiculosAtuais().get(position);
         App.setoVeiculoSelecionado(oVeiculoSelecionado);
         mPositionTask = new VeiculosPositionTask(oVeiculoSelecionado);
@@ -80,6 +88,7 @@ public class Main extends FragmentActivity
                 // if the drawer is not showing. Otherwise, let the drawer
                 // decide what to show in the action bar.
                 getMenuInflater().inflate(R.menu.main, menu);
+                getMenuInflater().inflate(R.menu.global, menu);
                 restoreActionBar();
                 return true;
             }
@@ -92,10 +101,36 @@ public class Main extends FragmentActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
+
+        if (item.getItemId() == R.id.action_settings) {
+            Toast.makeText(this, "Configurações.", Toast.LENGTH_SHORT).show();
             return true;
         }
+
+        if (item.getItemId() == R.id.action_logout) {
+            App.setoUsuarioLogado(null);
+            App.setoVeiculosAtuais(null);
+            App.setoVeiculoSelecionado(null);
+            this.finish();
+        }
+
+        if (item.getItemId() == R.id.action_refresh) {
+            progress = ProgressDialog.show(this, "Carregando posição", "Aguarde...", true);
+            mPositionTask = new VeiculosPositionTask(App.getoVeiculoSelecionado());
+            mPositionTask.execute();
+        }
+
+        if (item.getItemId() == R.id.action_anchor) {
+            Toast.makeText(this, "Anchor.", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.action_route) {
+            DialogFragment newFragment = new DatePickerFragment();
+            newFragment.show(this.getFragmentManager(), "dataInicial");
+        }
+
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -183,5 +218,41 @@ public class Main extends FragmentActivity
                 setUpMap(result);
         }
 
+    }
+
+    public static class DatePickerFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener {
+
+        private DatePickerDialog dlg;
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+
+            dlg = new DatePickerDialog(getActivity(), this, year, month, day);
+            if (this.getTag().equals("dataInicial"))
+                dlg.setTitle("Data Inicial");
+            else
+                dlg.setTitle("Data Final");
+
+            // Create a new instance of DatePickerDialog and return it
+            return dlg;
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            if (this.getTag().equals("dataInicial")){
+                Toast.makeText(getActivity().getApplicationContext(), "dataFinal: "+ day +"/" +month +"/"+year, Toast.LENGTH_SHORT).show();
+
+                DialogFragment newFragment = new DatePickerFragment();
+                newFragment.show(this.getFragmentManager(), "dataFinal");}
+            else if (this.getTag().equals("dataFinal")){
+                Toast.makeText(getActivity().getApplicationContext(), "dataFinal.", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

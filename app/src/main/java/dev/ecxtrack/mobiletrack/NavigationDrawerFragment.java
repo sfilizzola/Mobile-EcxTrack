@@ -247,22 +247,6 @@ public class NavigationDrawerFragment extends Fragment {
         if (mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-
-        if (item.getItemId() == R.id.action_refresh) {
-            Toast.makeText(getActivity(), "Refresh.", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-
-        if (item.getItemId() == R.id.action_anchor) {
-            Toast.makeText(getActivity(), "Anchor.", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-
-        if (item.getItemId() == R.id.action_route) {
-            Toast.makeText(getActivity(), "Route.", Toast.LENGTH_SHORT).show();
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
