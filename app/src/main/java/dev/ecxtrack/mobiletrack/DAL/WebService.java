@@ -9,6 +9,8 @@ import dev.ecxtrack.mobiletrack.Entidades.Veiculo;
 import dev.sfilizzola.data.Utilities.ArrayAdapterFilizzola;
 import dev.sfilizzola.utils.ArrayList;
 import dev.sfilizzola.utils.Log;
+
+import org.joda.time.DateTime;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.SoapObject;
@@ -120,6 +122,8 @@ public class WebService {
             oEvento.setHodometro(Integer.parseInt(resposta.getPropertyAsString("Hodometro")));
             oEvento.setLatitude(Double.parseDouble(resposta.getPropertyAsString("Latitude")));
             oEvento.setLongitude(Double.parseDouble(resposta.getPropertyAsString("Longitude")));
+            oEvento.setStatusIgnicao(resposta.getPropertyAsString("StatusIgnicao").equals("true"));
+            oEvento.setDataEvento(new DateTime(resposta.getPropertyAsString("DataEvento")));
         }
         return oEvento;
     }

@@ -79,11 +79,13 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 19 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="joda-time-2.0" level="project" />
     <orderEntry type="library" exported="" name="ksoap2-android-assembly-3.2.0-jar-with-dependencies" level="project" />
+    <orderEntry type="library" exported="" name="joda-time-2.4-javadoc" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-20.0.0" level="project" />
     <orderEntry type="library" exported="" name="support-v4-20.0.0" level="project" />
     <orderEntry type="library" exported="" name="play-services-5.0.89" level="project" />
+    <orderEntry type="library" exported="" name="joda-time-2.4" level="project" />
+    <orderEntry type="library" exported="" name="joda-time-2.4-sources" level="project" />
   </component>
 </module>
 

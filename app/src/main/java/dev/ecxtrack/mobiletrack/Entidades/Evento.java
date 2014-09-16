@@ -1,5 +1,9 @@
 package dev.ecxtrack.mobiletrack.Entidades;
 
+import android.net.wifi.WifiConfiguration;
+
+import org.joda.time.DateTime;
+
 /**
  * Created by samuel.filizzola on 19/08/2014.
  */
@@ -12,6 +16,9 @@ public class Evento {
     private Integer Hodometro;
     private Double Latitude;
     private Double Longitude;
+    private DateTime dataEvento;
+    private Boolean StatusIgnicao;
+
 
     public Evento(){
         CodCliente = 0;
@@ -91,5 +98,23 @@ public class Evento {
         if (longitude == null)
             longitude = 0.0;
         Longitude = longitude;
+    }
+
+    public DateTime getDataEvento() {
+        return dataEvento;
+    }
+
+    public void setDataEvento(DateTime dataEvento) {
+        this.dataEvento = dataEvento;
+    }
+
+    public Boolean isStatusIgnicao() {
+        if (StatusIgnicao == null)
+            return false;
+        return StatusIgnicao;
+    }
+
+    public void setStatusIgnicao(Boolean statusIgnicao) {
+        StatusIgnicao = statusIgnicao;
     }
 }

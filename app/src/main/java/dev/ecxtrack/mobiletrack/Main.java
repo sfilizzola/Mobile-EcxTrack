@@ -19,6 +19,8 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.joda.time.format.DateTimeFormatter;
+
 import dev.ecxtrack.mobiletrack.BLL.Veiculos;
 import dev.ecxtrack.mobiletrack.Entidades.Evento;
 import dev.ecxtrack.mobiletrack.Entidades.Veiculo;
@@ -132,16 +134,22 @@ public class Main extends FragmentActivity
         mMap.addMarker(new MarkerOptions().position(teste).title("Marcador"));
     }
 
-    private void setUpMap(double pLatitude, double pLongitude, String pTitulo){
+    private void setUpMap(Evento pEvento){
 
-        LatLng teste = new LatLng(pLatitude, pLongitude);
+
+
+        LatLng teste = new LatLng(pEvento.getLatitude(), pEvento.getLongitude());
         mMap.clear();
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(teste, 16.0f));
         //dados do Marcador
-        MarkerOptions oMarcador = new MarkerOptions().position(teste).title(pTitulo);
-        oMarcador.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_list_gcar));
+        MarkerOptions oMarcador = new MarkerOptions().position(teste).title(App.getoVeiculoSelecionado().getPlaca());
+        if (pEvento.isStatusIgnicao())
+            oMarcador.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_list_gcar));
+        else
+            oMarcador.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_list_rcar));
 
+        oMarcador.snippet("Data: " + pEvento.getDataEvento().toString("dd/MM/YYYY H:m:s"));
         //Adiciona Marcador
         mMap.addMarker(oMarcador);
 
@@ -172,7 +180,7 @@ public class Main extends FragmentActivity
             if (result.getCodCliente().equals(0))
                 setUpMap();
             else
-                setUpMap(result.getLatitude(), result.getLongitude(), App.getoVeiculoSelecionado().getPlaca());
+                setUpMap(result);
         }
 
     }
