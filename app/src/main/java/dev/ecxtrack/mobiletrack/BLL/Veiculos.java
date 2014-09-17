@@ -1,5 +1,9 @@
 package dev.ecxtrack.mobiletrack.BLL;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import org.joda.time.DateTime;
+
 import java.util.List;
 
 import dev.ecxtrack.mobiletrack.Entidades.Evento;
@@ -24,6 +28,10 @@ public class Veiculos implements IDisposable {
 
    public Evento UltimoEventoVeiculo (Veiculo pVeiculo){
        return oVeiculoDAL.BuscaUltimaPosicao(pVeiculo.getCodVeiculo());
+   }
+
+   public List<Evento> Trajetos (DateTime pDataInicial, DateTime pDataFinal, int pCodVeiculo){
+       return oVeiculoDAL.Trajetos(pDataInicial, pDataFinal, pCodVeiculo);
    }
 
     @Override

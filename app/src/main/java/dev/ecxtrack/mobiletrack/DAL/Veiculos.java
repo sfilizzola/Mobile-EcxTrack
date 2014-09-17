@@ -1,4 +1,7 @@
 package dev.ecxtrack.mobiletrack.DAL;
+import com.google.android.gms.maps.model.LatLng;
+
+import org.joda.time.DateTime;
 import org.ksoap2.SoapFault;
 import org.ksoap2.transport.HttpResponseException;
 import org.xmlpull.v1.XmlPullParserException;
@@ -114,4 +117,18 @@ public class Veiculos extends DataAccessLayerBase{
     }
 
 
+    public List<Evento> Trajetos(DateTime pDataInicial, DateTime pDataFinal, int pCodVeiculo) {
+        WebService ws = new WebService();
+        try {
+            return ws.Trajetos(pDataInicial, pDataFinal, pCodVeiculo);
+        } catch (XmlPullParserException e) {
+            Log.e(TAG, e.getMessage());
+        } catch (HttpResponseException e) {
+            Log.e(TAG, e.getMessage());
+        } catch (SoapFault soapFault) {
+            Log.e(TAG, soapFault.getMessage());
+        }
+        return null;
+
+    }
 }

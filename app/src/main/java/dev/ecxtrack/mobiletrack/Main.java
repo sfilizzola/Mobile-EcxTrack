@@ -27,9 +27,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Calendar;
+import java.util.List;
 
 import dev.ecxtrack.mobiletrack.BLL.Veiculos;
 import dev.ecxtrack.mobiletrack.Entidades.Evento;
@@ -49,6 +51,8 @@ public class Main extends FragmentActivity
     private View mProgressView;
 
     private VeiculosPositionTask mPositionTask;
+
+    private TrajetosTask mTrajTask;
 
     private ProgressDialog progress;
 
@@ -184,11 +188,67 @@ public class Main extends FragmentActivity
         else
             oMarcador.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_list_rcar));
 
-        oMarcador.snippet("Data: " + pEvento.getDataEvento().toString("dd/MM/YYYY H:m:s"));
+        oMarcador.snippet("Data: " + pEvento.getDataEvento().toString("dd/MM/YYYY HH:mm:ss"));
         //Adiciona Marcador
         mMap.addMarker(oMarcador);
 
     }
+
+    private void setUpLines(List<Evento> result) {
+
+        mMap.clear();
+
+        Polyline line = mMap.addPolyline(new PolylineOptions()
+                .add(Converte(result))
+                .color(Color.BLUE)
+                .geodesic(true));
+
+        AdicionaMarcadoresDeVertices(result);
+
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Converte(result)[0], 16.0f));
+
+    }
+
+    private void AdicionaMarcadoresDeVertices(List<Evento> result) {
+
+        int cont = 1;
+
+        for(Evento ev : result){
+
+            LatLng positionPlace = new LatLng(ev.getLatitude(), ev.getLongitude());
+
+            MarkerOptions oMarcador = new MarkerOptions().position(positionPlace).title("Transmissão: " + cont);
+
+            oMarcador.snippet("Data: " + ev.getDataEvento().toString("dd/MM/YYYY HH:mm:ss"));
+            //Adiciona Marcador
+            mMap.addMarker(oMarcador);
+            cont++;
+        }
+
+
+    }
+
+    private LatLng[] Converte (List<Evento> result){
+
+        LatLng[] eventos = new LatLng[result.size()];
+
+        int cont = 0;
+
+        for(Evento ev : result){
+            eventos[cont] = new LatLng(ev.getLatitude(), ev.getLongitude());
+            cont++;
+        }
+
+        return eventos;
+    }
+
+    public void MontaTrajeto(DateTime dtInicial, DateTime dtFinal) {
+        progress = ProgressDialog.show(this, "Carregando Trajetos", "Aguarde...", true);
+        mTrajTask = new TrajetosTask(dtInicial, dtFinal, App.getoVeiculoSelecionado().getCodVeiculo());
+        mTrajTask.execute();
+    }
+
 
     public class VeiculosPositionTask extends AsyncTask<Void, Void, Evento> {
 
@@ -220,10 +280,43 @@ public class Main extends FragmentActivity
 
     }
 
-    public static class DatePickerFragment extends DialogFragment
+    public class TrajetosTask extends AsyncTask<Void, Void, List<Evento>> {
+
+        private DateTime mDtInicial;
+        private DateTime mDtFinal;
+        private int mCodVeiculo;
+
+        TrajetosTask(DateTime pDtInicial, DateTime pDatafinal, int pCodVeiculo) {
+            mDtInicial = pDtInicial;
+            mDtFinal = pDatafinal;
+            mCodVeiculo = pCodVeiculo;
+        }
+
+        @Override
+        protected List<Evento> doInBackground(Void... params) {
+
+            List<Evento> vretVal;
+            Veiculos BLLVeiculos = new Veiculos();
+            vretVal = BLLVeiculos.Trajetos(mDtInicial, mDtFinal, mCodVeiculo);
+            BLLVeiculos.Dispose();
+            return vretVal;
+        }
+
+        @Override
+        protected void onPostExecute(List<Evento> result) {
+            progress.dismiss();            
+            setUpLines(result);
+        }
+
+    }
+
+   /* public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
 
         private DatePickerDialog dlg;
+        private DateTime dtInicial;
+        private DateTime dtFinal;
+        private Main.TrajetosTask mTrajTask;
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -246,13 +339,19 @@ public class Main extends FragmentActivity
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
             if (this.getTag().equals("dataInicial")){
-                Toast.makeText(getActivity().getApplicationContext(), "dataFinal: "+ day +"/" +month +"/"+year, Toast.LENGTH_SHORT).show();
 
+                //(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour)
+                dtInicial = new DateTime(year, month, day, 0, 1);
+                //Caham outra janela de Data
                 DialogFragment newFragment = new DatePickerFragment();
                 newFragment.show(this.getFragmentManager(), "dataFinal");}
             else if (this.getTag().equals("dataFinal")){
-                Toast.makeText(getActivity().getApplicationContext(), "dataFinal.", Toast.LENGTH_SHORT).show();
+
+                dtFinal = new DateTime(year, month, day, 23, 59);
+                //chama task
+
+                //MontaTrajeto(dtInicial, dtFinal);
             }
         }
-    }
+    }*/
 }

@@ -175,6 +175,53 @@ public class WebService {
         return vRet;
     }
 
+    public List<Evento> Trajetos (DateTime pDataInicial, DateTime pDataFinal, int pCodVeiculo)  throws XmlPullParserException, HttpResponseException, SoapFault{
+        //CodVeiculo
+        SOAP_ACTION = "http://tempuri.org/IEcxTrackAppServices/ListaPontosPeriodo";
+        METHOD_NAME = "ListaPontosPeriodo";
+
+        //Define Objeto SOAP
+        SoapObject soap = new SoapObject(NAMESPACE, METHOD_NAME);
+        soap.addProperty("DataIni", pDataInicial.toString("dd/MM/YYYY"));
+        soap.addProperty("DataFim", pDataFinal.toString("dd/MM/YYYY"));
+        soap.addProperty("HoraIni", pDataInicial.toString("HH:mm:ss"));
+        soap.addProperty("HoraFim", pDataFinal.toString("HH:mm:ss"));
+        soap.addProperty("CodVeiculo", pCodVeiculo);
+
+
+        //cria envelope
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(soap);
+        Log.i(TAG, "Chamando Webservice: " + URL);
+        //Cria HTTPTransport para enviar os dados (SOAP)
+
+        HttpTransportSE httpTransport = new HttpTransportSE(URL);
+        try {
+            httpTransport.call(SOAP_ACTION, envelope);
+        }catch (Exception e){
+            Log.e(TAG, "Erro HttpTransportSE: "+ e.getMessage());
+        }
+
+
+        List<Evento> vRet = new ArrayList<Evento>();
+        SoapObject result = (SoapObject)envelope.getResponse();
+
+        for(int i= 0; i< result.getPropertyCount(); i++){
+
+            Evento oEvento = new Evento();
+
+            SoapObject object = (SoapObject)result.getProperty(i);
+
+            oEvento.setHodometro(Integer.parseInt(object.getPropertyAsString("Hodometro")));
+            oEvento.setLatitude(Double.parseDouble(object.getPropertyAsString("Latitude")));
+            oEvento.setLongitude(Double.parseDouble(object.getPropertyAsString("Longitude")));
+            oEvento.setDataEvento(new DateTime(object.getPropertyAsString("DataEvento")));
+            vRet.add(oEvento);
+        }
+        return vRet;
+    }
+
 
     /*
         -------------------- RESPOSTA VEICULO --------------------------
