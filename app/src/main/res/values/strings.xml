@@ -9,6 +9,7 @@
     <string name="navigation_drawer_open">Abrir Menu</string>
     <string name="navigation_drawer_close">Fechar Menu</string>
     <string name="action_settings">Configurações</string>
+    <string name="action_find">Achar</string>
     <string name="action_refresh">Atualizar</string>
     <string name="action_anchor">Âncora</string>
     <string name="action_route">Trajetos</string>

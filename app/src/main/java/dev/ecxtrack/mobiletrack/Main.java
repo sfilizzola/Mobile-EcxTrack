@@ -2,11 +2,15 @@ package dev.ecxtrack.mobiletrack;
 
 import android.app.ActionBar;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.IntentSender;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -18,6 +22,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesClient;
+import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -39,7 +46,8 @@ import dev.ecxtrack.mobiletrack.Entidades.Veiculo;
 
 
 public class Main extends FragmentActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks, GooglePlayServicesClient.ConnectionCallbacks,
+        GooglePlayServicesClient.OnConnectionFailedListener {
 
     //Fragment managing the behaviors, interactions and presentation of the navigation drawer.
     private NavigationDrawerFragment mNavigationDrawerFragment;
@@ -56,6 +64,11 @@ public class Main extends FragmentActivity
 
     private ProgressDialog progress;
 
+    private LocationClient mLocationClient;
+
+    private Location mCurrentLocation;
+
+    private Menu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +83,8 @@ public class Main extends FragmentActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        mLocationClient = new LocationClient(this, this, this);
 
     }
 
@@ -93,6 +108,8 @@ public class Main extends FragmentActivity
                 // decide what to show in the action bar.
                 getMenuInflater().inflate(R.menu.main, menu);
                 getMenuInflater().inflate(R.menu.global, menu);
+
+                mMenu = menu;
                 restoreActionBar();
                 return true;
             }
@@ -106,10 +123,10 @@ public class Main extends FragmentActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
 
-        if (item.getItemId() == R.id.action_settings) {
+        /*if (item.getItemId() == R.id.action_settings) {
             Toast.makeText(this, "Configurações.", Toast.LENGTH_SHORT).show();
             return true;
-        }
+        }*/
 
         if (item.getItemId() == R.id.action_logout) {
             App.setoUsuarioLogado(null);
@@ -124,9 +141,13 @@ public class Main extends FragmentActivity
             mPositionTask.execute();
         }
 
-        if (item.getItemId() == R.id.action_anchor) {
+       /* if (item.getItemId() == R.id.action_anchor) {
             Toast.makeText(this, "Anchor.", Toast.LENGTH_SHORT).show();
             return true;
+        }*/
+
+        if (item.getItemId() == R.id.action_find) {
+            TracaCaminhoUsuarioLocalAteCarroSelecionado(App.getoVeiculoSelecionado());
         }
 
         if (item.getItemId() == R.id.action_route) {
@@ -136,6 +157,29 @@ public class Main extends FragmentActivity
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void TracaCaminhoUsuarioLocalAteCarroSelecionado(Veiculo veiculo) {
+        mCurrentLocation = mLocationClient.getLastLocation();
+
+        new AlertDialog.Builder(this)
+                .setTitle("Atenção")
+                .setMessage("Deseja traçar uma linha da sua posição atual até o Veículo " + veiculo.getPlaca() + " ?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Polyline line = mMap.addPolyline(new PolylineOptions()
+                                .add(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), new LatLng(App.getoEventoAtual().getLatitude(), App.getoEventoAtual().getLongitude()))
+                                .color(Color.BLUE)
+                                .geodesic(true));
+                        mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 16.0f));
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+
     }
 
     @Override
@@ -166,7 +210,7 @@ public class Main extends FragmentActivity
 
     private void setUpMap() {
         //TODO - Inicia com posição atual do cliente.
-
+        mMap.setMyLocationEnabled(true);
         LatLng teste = new LatLng(-19.921161, -43.914792);
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(teste, 16.0f));
@@ -175,7 +219,7 @@ public class Main extends FragmentActivity
 
     private void setUpMap(Evento pEvento){
 
-
+        mMap.setMyLocationEnabled(true);
 
         LatLng teste = new LatLng(pEvento.getLatitude(), pEvento.getLongitude());
         mMap.clear();
@@ -194,16 +238,18 @@ public class Main extends FragmentActivity
 
     }
 
-    private void setUpLines(List<Evento> result) {
+    private void setUpLines(List<Evento> result, boolean SetMarkers, boolean ClearMap) {
 
-        mMap.clear();
+        if (ClearMap)
+            mMap.clear();
 
         Polyline line = mMap.addPolyline(new PolylineOptions()
                 .add(Converte(result))
                 .color(Color.BLUE)
                 .geodesic(true));
 
-        AdicionaMarcadoresDeVertices(result);
+        if (SetMarkers)
+            AdicionaMarcadoresDeVertices(result);
 
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Converte(result)[0], 16.0f));
@@ -249,6 +295,56 @@ public class Main extends FragmentActivity
         mTrajTask.execute();
     }
 
+    @Override
+    public void onConnected(Bundle bundle) {
+        mMenu.getItem(3).setEnabled(true);
+    }
+
+    @Override
+    public void onDisconnected() {
+        mMenu.getItem(3).setEnabled(false);
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        if (connectionResult.hasResolution()) {
+            try {
+                // Start an Activity that tries to resolve the error
+                connectionResult.startResolutionForResult(this, 9000);
+                /*
+                 * Thrown if Google Play services canceled the original
+                 * PendingIntent
+                 */
+            } catch (IntentSender.SendIntentException e) {
+                // Log the error
+                e.printStackTrace();
+            }
+        } else {
+            /*
+             * If no resolution is available, display a dialog to the
+             * user with the error.
+             */
+            mMenu.getItem(3).setEnabled(false);
+            Toast.makeText(this, "Não é possivel achar localização do usuário.",
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Connect the client.
+        mLocationClient.connect();
+    }
+    /*
+     * Called when the Activity is no longer visible.
+     */
+    @Override
+    protected void onStop() {
+        // Disconnecting the client invalidates it.
+        mLocationClient.disconnect();
+        super.onStop();
+    }
 
     public class VeiculosPositionTask extends AsyncTask<Void, Void, Evento> {
 
@@ -305,7 +401,7 @@ public class Main extends FragmentActivity
         @Override
         protected void onPostExecute(List<Evento> result) {
             progress.dismiss();            
-            setUpLines(result);
+            setUpLines(result, true, true);
         }
 
     }
