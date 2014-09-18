@@ -209,12 +209,15 @@ public class Main extends FragmentActivity
     }
 
     private void setUpMap() {
-        //TODO - Inicia com posição atual do cliente.
-        mMap.setMyLocationEnabled(true);
-        LatLng teste = new LatLng(-19.921161, -43.914792);
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(teste, 16.0f));
-        mMap.addMarker(new MarkerOptions().position(teste).title("Marcador"));
+        if (mLocationClient.isConnected()) {
+            mCurrentLocation = mLocationClient.getLastLocation();
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 16.0f));
+        } else {
+            //Local da  sede da ECX card
+            mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(-19.936162, -43.944933), 16.0f));
+        }
     }
 
     private void setUpMap(Evento pEvento){
