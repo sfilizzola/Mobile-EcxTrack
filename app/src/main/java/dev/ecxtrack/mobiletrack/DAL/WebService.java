@@ -101,30 +101,34 @@ public class WebService {
         Log.i(TAG, "Chamando Webservice: " + URL);
         //Cria HTTPTransport para enviar os dados (SOAP)
 
+        //Evento de resultado
+        Evento oEvento = null;
+
         HttpTransportSE httpTransport = new HttpTransportSE(URL);
         try {
             httpTransport.call(SOAP_ACTION, envelope);
+
+            SoapObject resposta = (SoapObject)envelope.getResponse();
+
+            oEvento = new Evento();
+
+            if (resposta != null)
+            {
+                oEvento.setCodCliente(Integer.parseInt(resposta.getPropertyAsString("CodCliente")));
+                oEvento.setCodEquipamento(Integer.parseInt(resposta.getPropertyAsString("CodEquipamento")));
+                oEvento.setCodEvento(Integer.parseInt(resposta.getPropertyAsString("CodEvento")));
+                oEvento.setCodVeiculo(Integer.parseInt(resposta.getPropertyAsString("CodVeiculo")));
+                oEvento.setHodometro(Integer.parseInt(resposta.getPropertyAsString("Hodometro")));
+                oEvento.setLatitude(Double.parseDouble(resposta.getPropertyAsString("Latitude")));
+                oEvento.setLongitude(Double.parseDouble(resposta.getPropertyAsString("Longitude")));
+                oEvento.setStatusIgnicao(resposta.getPropertyAsString("StatusIgnicao").equals("true"));
+                oEvento.setDataEvento(new DateTime(resposta.getPropertyAsString("DataEvento")));
+            }
+
         }catch (Exception e){
             Log.e(TAG, "Erro HttpTransportSE: "+ e.getMessage());
         }
 
-        //Evento de resultado
-        Evento oEvento = new Evento();
-
-        SoapObject resposta = (SoapObject)envelope.getResponse();
-
-        if (resposta != null)
-        {
-            oEvento.setCodCliente(Integer.parseInt(resposta.getPropertyAsString("CodCliente")));
-            oEvento.setCodEquipamento(Integer.parseInt(resposta.getPropertyAsString("CodEquipamento")));
-            oEvento.setCodEvento(Integer.parseInt(resposta.getPropertyAsString("CodEvento")));
-            oEvento.setCodVeiculo(Integer.parseInt(resposta.getPropertyAsString("CodVeiculo")));
-            oEvento.setHodometro(Integer.parseInt(resposta.getPropertyAsString("Hodometro")));
-            oEvento.setLatitude(Double.parseDouble(resposta.getPropertyAsString("Latitude")));
-            oEvento.setLongitude(Double.parseDouble(resposta.getPropertyAsString("Longitude")));
-            oEvento.setStatusIgnicao(resposta.getPropertyAsString("StatusIgnicao").equals("true"));
-            oEvento.setDataEvento(new DateTime(resposta.getPropertyAsString("DataEvento")));
-        }
         return oEvento;
     }
 

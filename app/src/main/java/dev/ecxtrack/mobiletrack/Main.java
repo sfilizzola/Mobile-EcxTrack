@@ -300,12 +300,12 @@ public class Main extends FragmentActivity
 
     @Override
     public void onConnected(Bundle bundle) {
-        mMenu.getItem(3).setEnabled(true);
+        //mMenu.getItem(3).setEnabled(true);
     }
 
     @Override
     public void onDisconnected() {
-        mMenu.getItem(3).setEnabled(false);
+        //mMenu.getItem(3).setEnabled(false);
     }
 
     @Override
@@ -327,7 +327,7 @@ public class Main extends FragmentActivity
              * If no resolution is available, display a dialog to the
              * user with the error.
              */
-            mMenu.getItem(3).setEnabled(false);
+            //mMenu.getItem(3).setEnabled(false);
             Toast.makeText(this, "Não é possivel achar localização do usuário.",
                     Toast.LENGTH_SHORT).show();
         }
@@ -371,7 +371,7 @@ public class Main extends FragmentActivity
         protected void onPostExecute(Evento result) {
             progress.dismiss();
             App.setoEventoAtual(result);
-            if (result.getCodCliente().equals(0))
+            if (result == null || result.getCodCliente().equals(0))
                 setUpMap();
             else
                 setUpMap(result);

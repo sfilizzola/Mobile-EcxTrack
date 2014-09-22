@@ -52,6 +52,13 @@
                     android:maxLines="1"
                     android:singleLine="true"/>
 
+                <CheckBox
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/login_checkbox"
+                    android:id="@+id/chkSave"
+                    android:layout_gravity="center_horizontal" />
+
                 <Button
                     android:id="@+id/email_sign_in_button"
                     style="?android:textAppearanceSmall"

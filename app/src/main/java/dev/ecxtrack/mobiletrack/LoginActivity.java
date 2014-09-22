@@ -9,6 +9,7 @@ import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -24,6 +25,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -51,8 +53,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+    private CheckBox mChkSave;
     private View mProgressView;
     private View mLoginFormView;
+    private static final String PREFS_NAME = "TrackPrefs";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +80,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             }
         });
 
+        mChkSave = (CheckBox)findViewById(R.id.chkSave);
+
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -82,6 +89,22 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
                 attemptLogin();
             }
         });
+
+
+
+        // Restore preferences
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        boolean checked = settings.getBoolean("checkSave",false);
+        String SettingsUsername = settings.getString("username", null);
+        String SettingsPassword = settings.getString("password", null);
+
+        mChkSave.setChecked(checked);
+
+        if (SettingsUsername != null)
+            mEmailView.setText(SettingsUsername);
+
+        if (SettingsPassword != null)
+            mPasswordView.setText(SettingsPassword);
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
@@ -109,6 +132,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+        boolean checkSave = mChkSave.isChecked();
 
         boolean cancel = false;
         View focusView = null;
@@ -140,6 +164,16 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
+
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+
+            editor.putBoolean("checkSave",checkSave);
+            editor.putString("username", email);
+            editor.putString("password", password);
+            // Commit the edits!
+            editor.commit();
+
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
         }

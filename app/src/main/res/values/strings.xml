@@ -3,9 +3,7 @@
 
     <string name="app_name">ECXTrack Mobile</string>
     <string name="title_activity_main">Principal</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="login_checkbox">Salvar Usuário e Senha</string>
     <string name="navigation_drawer_open">Abrir Menu</string>
     <string name="navigation_drawer_close">Fechar Menu</string>
     <string name="action_settings">Configurações</string>
