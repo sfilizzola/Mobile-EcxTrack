@@ -8,9 +8,12 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -56,8 +59,6 @@ public class Main extends FragmentActivity
     // Used to store the last screen title. For use in {@link #restoreActionBar()}.
     private CharSequence mTitle;
 
-    private View mProgressView;
-
     private VeiculosPositionTask mPositionTask;
 
     private TrajetosTask mTrajTask;
@@ -67,6 +68,8 @@ public class Main extends FragmentActivity
     private LocationClient mLocationClient;
 
     private Location mCurrentLocation;
+
+    private static final String PREFS_NAME = "TrackPrefs";
 
     private Menu mMenu;
 
@@ -155,6 +158,55 @@ public class Main extends FragmentActivity
             newFragment.show(this.getFragmentManager(), "dataInicial");
         }
 
+        if (item.getItemId() == R.id.action_maptype) {
+
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle(R.string.action_maptype)
+                    .setItems(R.array.tipos_de_mapa, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            int MAP_TYPE;
+                            switch (which) {
+                                //Normal
+                                case 0:
+                                    MAP_TYPE = GoogleMap.MAP_TYPE_NORMAL;
+                                    break;
+                                //Satelite
+                                case 1:
+                                    MAP_TYPE = GoogleMap.MAP_TYPE_SATELLITE;
+                                    break;
+                                //Terreno
+                                case 2:
+                                    MAP_TYPE = GoogleMap.MAP_TYPE_TERRAIN;
+                                    break;
+                                //Hibrido
+                                case 3:
+                                    MAP_TYPE = GoogleMap.MAP_TYPE_HYBRID;
+                                    break;
+                                //Normal
+                                default:
+                                    MAP_TYPE = GoogleMap.MAP_TYPE_NORMAL;
+                                    break;
+                            }
+                            mMap.setMapType(MAP_TYPE);
+
+                            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                            SharedPreferences.Editor editor = settings.edit();
+
+                            editor.putInt("MapType", MAP_TYPE);
+                            // Commit the edits!
+                            editor.commit();
+
+
+                        }
+                    });
+
+
+
+
+            builder.show();
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -164,16 +216,14 @@ public class Main extends FragmentActivity
 
         new AlertDialog.Builder(this)
                 .setTitle("Atenção")
-                .setMessage("Deseja traçar uma linha da sua posição atual até o Veículo " + veiculo.getPlaca() + " ?")
+                .setMessage("Deseja traçar uma rota de sua posição atual até o Veículo " + veiculo.getPlaca() + " ?")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Polyline line = mMap.addPolyline(new PolylineOptions()
-                                .add(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), new LatLng(App.getoEventoAtual().getLatitude(), App.getoEventoAtual().getLongitude()))
-                                .color(Color.BLUE)
-                                .geodesic(true));
-                        mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 16.0f));
+
+                        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                                Uri.parse("http://maps.google.com/maps?daddr=" + App.getoEventoAtual().getLatitude() + "," + App.getoEventoAtual().getLongitude()));
+                        startActivity(intent);
                     }
                 })
                 .setNegativeButton(android.R.string.no, null)
@@ -203,6 +253,9 @@ public class Main extends FragmentActivity
                     .getMap();
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                int mapType = settings.getInt("MapType", GoogleMap.MAP_TYPE_NORMAL);
+                mMap.setMapType(mapType);
                 setUpMap();
             }
         }

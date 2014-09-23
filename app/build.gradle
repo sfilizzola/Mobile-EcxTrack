@@ -9,11 +9,13 @@ android {
         applicationId 'dev.ecxtrack.mobiletrack'
         minSdkVersion 14
         targetSdkVersion 19
-        versionCode 2
-        versionName '1.1B'
+        versionCode 3
+        versionName '0.5B'
     }
     buildTypes {
         ECXTrackMobile {
+        }
+        debug {
         }
     }
     sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }

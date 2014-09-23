@@ -90,8 +90,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             }
         });
 
-
-
         // Restore preferences
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         boolean checked = settings.getBoolean("checkSave",false);

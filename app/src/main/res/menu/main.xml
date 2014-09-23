@@ -13,6 +13,10 @@
         android:title="@string/action_route"
         android:icon="@drawable/ic_action_directions"
         android:showAsAction="ifRoom" />
+    <item android:id="@+id/action_maptype"
+        android:title="@string/action_maptype"
+        android:icon="@drawable/ic_action_map"
+        android:showAsAction="ifRoom" />
     <item android:id="@+id/action_find"
         android:title="@string/action_find"
         android:icon="@drawable/ic_action_help"
