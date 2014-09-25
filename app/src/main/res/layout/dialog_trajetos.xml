@@ -27,6 +27,12 @@
             android:calendarViewShown="false"
             android:spinnersShown="false" />
 
+        <TimePicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/timeInicio"
+            android:layout_gravity="center_horizontal" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,6 +46,12 @@
             android:id="@+id/dtFinal"
             android:layout_gravity="center_horizontal"
             android:calendarViewShown="false" />
+
+        <TimePicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/timeFim"
+            android:layout_gravity="center_horizontal" />
 
         <LinearLayout
             android:orientation="horizontal"

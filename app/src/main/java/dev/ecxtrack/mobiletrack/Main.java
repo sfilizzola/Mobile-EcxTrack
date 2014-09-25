@@ -200,10 +200,6 @@ public class Main extends FragmentActivity
 
                         }
                     });
-
-
-
-
             builder.show();
         }
 
