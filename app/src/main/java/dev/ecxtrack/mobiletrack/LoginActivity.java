@@ -143,17 +143,6 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             cancel = true;
         }
 
-        // Check for a valid email address.
-        /*if (TextUtils.isEmpty(email)) {
-            mEmailView.setError(getString(R.string.error_field_required));
-            focusView = mEmailView;
-            cancel = true;
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_username));
-            focusView = mEmailView;
-            cancel = true;
-        }*/
-
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.
@@ -275,6 +264,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
 
         private final String mEmail;
         private final String mPassword;
+        private String error_MSG;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -292,6 +282,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
                 login.Dispose();
                 return true;
             } catch (UserException exception){
+                error_MSG = exception.getMessage();
                 login.Dispose();
                 return false;
             }
@@ -308,7 +299,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
                 startActivity(newIntent);
 
             } else {
-                mPasswordView.setError(getString(R.string.error_invalid_password));
+                mPasswordView.setError(error_MSG);
                 mPasswordView.requestFocus();
             }
         }

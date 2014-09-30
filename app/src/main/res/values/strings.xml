@@ -8,14 +8,14 @@
     <string name="navigation_drawer_close">Fechar Menu</string>
     <string name="action_settings">Configurações</string>
     <string name="action_maptype">Tipo de Mapa</string>
-    <string name="action_find">Achar</string>
+    <string name="action_find">Rota Até o Carro</string>
     <string name="action_refresh">Atualizar</string>
     <string name="action_anchor">Âncora</string>
     <string name="action_route">Trajetos</string>
     <string name="action_logout">Sair</string>
     <string name="title_activity_map">Map</string>
     <string name="title_activity_loading">LoadingAct</string>
-    <string name="app_loading">Carregando...</string>
+    <string name="app_loading">Carregando…</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

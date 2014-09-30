@@ -28,11 +28,13 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient;
 import com.google.android.gms.location.LocationClient;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -302,15 +304,14 @@ public class Main extends FragmentActivity
 
         if (SetMarkers)
             AdicionaMarcadoresDeVertices(result);
-
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(Converte(result)[0], 16.0f));
-
     }
 
     private void AdicionaMarcadoresDeVertices(List<Evento> result) {
 
         int cont = 1;
+
+        //Construtor de Limites
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
         for(Evento ev : result){
 
@@ -319,12 +320,21 @@ public class Main extends FragmentActivity
             MarkerOptions oMarcador = new MarkerOptions().position(positionPlace).title("Transmissão: " + cont);
 
             oMarcador.snippet("Data: " + ev.getDataEvento().toString("dd/MM/YYYY HH:mm:ss"));
+
+            //inclui posição nos builders
+            builder.include(oMarcador.getPosition());
+
             //Adiciona Marcador
             mMap.addMarker(oMarcador);
             cont++;
         }
 
+        //Limites
+        LatLngBounds bounds = builder.build();
 
+        int padding = 100; // offset from edges of the map in pixels
+        CameraUpdate CamUp = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+        mMap.animateCamera(CamUp);
     }
 
     private LatLng[] Converte (List<Evento> result){

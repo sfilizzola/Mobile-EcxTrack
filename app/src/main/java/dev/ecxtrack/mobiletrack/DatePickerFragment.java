@@ -39,8 +39,12 @@ public class DatePickerFragment extends DialogFragment implements DialogInterfac
 
         hrInicial = (TimePicker) dlg.findViewById(R.id.timeInicio);
         hrInicial.setIs24HourView(true);
+        hrInicial.setCurrentHour(6);
+        hrInicial.setCurrentMinute(0);
         hrFinal = (TimePicker) dlg.findViewById(R.id.timeFim);
         hrFinal.setIs24HourView(true);
+        hrFinal.setCurrentHour(23);
+        hrFinal.setCurrentMinute(59);
 
         btnOk = (Button)dlg.findViewById(R.id.btnOK);
         btnOk.setOnClickListener(new View.OnClickListener() {
