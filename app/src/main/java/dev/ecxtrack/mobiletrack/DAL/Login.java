@@ -19,15 +19,13 @@ public class Login extends DataAccessLayerBase {
 
     public Usuario VerificaLogin (String pNomeUsuario, String pSenha){
 
-        Usuario oUsu = null;
+        Usuario oUsu = BuscaUsuarioWebservice(pNomeUsuario, pSenha);
+       // oUsu = BuscaUsuarioLocal(pNomeUsuario, pSenha);
+        //if (oUsu == null)
+        //oUsu = BuscaUsuarioWebservice(pNomeUsuario, pSenha);
 
-        oUsu = BuscaUsuarioLocal(pNomeUsuario, pSenha);
-        if (oUsu == null)
-            oUsu = BuscaUsuarioWebservice(pNomeUsuario, pSenha);
-
-            if (oUsu != null && oUsu.getStatus().equals("OK"))
-                InsereUsuarioLocal(oUsu);
-
+            //if (oUsu != null && oUsu.getStatus().equals("OK"))
+              //  InsereUsuarioLocal(oUsu);
             //if (oUsu != null && oUsu.getStatus().equals("NOT"))
             //     TrataRetornoUsuario(oUsu.getStatus());
 

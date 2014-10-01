@@ -468,6 +468,26 @@ public class Main extends FragmentActivity
 
     }
 
+    @Override
+    public void onBackPressed() {
+        CallCloseDialog();
+    }
+
+    private void CallCloseDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+        dialog.setIcon(android.R.drawable.ic_dialog_info);
+        dialog.setTitle("Atenção");
+        dialog.setMessage(R.string.alert_exit_list);
+        dialog.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finish();
+            }
+        });
+        dialog.setNegativeButton("Não", null);
+        dialog.create().show();
+    }
+
    /* public static class DatePickerFragment extends DialogFragment
             implements DatePickerDialog.OnDateSetListener {
 

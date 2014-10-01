@@ -17,5 +17,6 @@
     <string name="title_activity_loading">LoadingAct</string>
     <string name="app_loading">Carregando…</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="alert_exit_list">Deseja sair da tela do mapa ?</string>
 
 </resources>
