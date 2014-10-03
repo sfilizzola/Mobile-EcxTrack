@@ -98,12 +98,18 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
 
         mChkSave.setChecked(checked);
 
-        if (SettingsUsername != null)
-            mEmailView.setText(SettingsUsername);
+        if (checked) {
+            if (SettingsUsername != null)
+                mEmailView.setText(SettingsUsername);
 
-        if (SettingsPassword != null)
-            mPasswordView.setText(SettingsPassword);
-
+            if (SettingsPassword != null)
+                mPasswordView.setText(SettingsPassword);
+        }
+            else
+        {
+            mEmailView.setText("");
+            mPasswordView.setText("");
+        }
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
     }
