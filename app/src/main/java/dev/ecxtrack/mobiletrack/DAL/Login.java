@@ -17,7 +17,7 @@ public class Login extends DataAccessLayerBase {
 
     public Login(){}
 
-    public Usuario VerificaLogin (String pNomeUsuario, String pSenha){
+    public Usuario VerificaLogin (String pNomeUsuario, String pSenha) throws HttpResponseException{
 
         Usuario oUsu = BuscaUsuarioWebservice(pNomeUsuario, pSenha);
        // oUsu = BuscaUsuarioLocal(pNomeUsuario, pSenha);
@@ -68,15 +68,13 @@ public class Login extends DataAccessLayerBase {
         return oUsu;
     }
 
-    private Usuario BuscaUsuarioWebservice(String pNomeUsuario, String pSenha) {
+    private Usuario BuscaUsuarioWebservice(String pNomeUsuario, String pSenha) throws HttpResponseException{
         WebService ws = new WebService();
         try {
             return ws.Login(pNomeUsuario, pSenha);
         } catch (XmlPullParserException e) {
             Log.e(TAG, e.getMessage());
-        } catch (HttpResponseException e) {
-            Log.e(TAG, e.getMessage());
-        } catch (SoapFault soapFault) {
+        }  catch (SoapFault soapFault) {
             Log.e(TAG, soapFault.getMessage());
         }
         return null;

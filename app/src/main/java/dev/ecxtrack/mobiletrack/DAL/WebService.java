@@ -59,16 +59,21 @@ public class WebService {
 
             SoapObject resposta = (SoapObject)envelope.getResponse();
 
-            oUsu = new Usuario();
-            oUsu.setCodUsuario(Integer.parseInt(resposta.getPropertyAsString("CodUsuario")));
-            oUsu.setNome(resposta.getPropertyAsString("Nome"));
-            //oUsu.setCPF(resposta.getPropertyAsString("CPF"));
-            oUsu.setEmail(resposta.getPropertyAsString("Email"));
-            oUsu.setStatus(resposta.getPropertyAsString("Status"));
 
+            if (resposta.getPropertyAsString("Status").equals("Zica")){
+                return null;
+            } else {
+                oUsu = new Usuario();
+                oUsu.setCodUsuario(Integer.parseInt(resposta.getPropertyAsString("CodUsuario")));
+                oUsu.setNome(resposta.getPropertyAsString("Nome"));
+                //oUsu.setCPF(resposta.getPropertyAsString("CPF"));
+                oUsu.setEmail(resposta.getPropertyAsString("Email"));
+                oUsu.setStatus(resposta.getPropertyAsString("Status"));
+            }
 
         }catch (Exception e){
             Log.e(TAG, "Erro HttpTransportSE: "+ e.getMessage());
+            throw new HttpResponseException("Erro de conexão com o servidor. Tente novamente mais tarde.", 404);
         }
 
 

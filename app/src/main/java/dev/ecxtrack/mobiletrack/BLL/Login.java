@@ -1,5 +1,7 @@
 package dev.ecxtrack.mobiletrack.BLL;
 
+import org.ksoap2.transport.HttpResponseException;
+
 import dev.ecxtrack.mobiletrack.Entidades.Usuario;
 import dev.ecxtrack.mobiletrack.Exceptions.UserException;
 
@@ -15,8 +17,16 @@ public class Login implements IDisposable{
 
     public Usuario ValidaLogin (String pNomeUsuario, String pSenha) throws UserException {
         Usuario vRetVal = null;
-        vRetVal =  oLogDAL.VerificaLogin(pNomeUsuario, pSenha);
-        if (vRetVal == null) throw new UserException("Usuário ou senha inválidos.");
+        try {
+            vRetVal =  oLogDAL.VerificaLogin(pNomeUsuario, pSenha);
+        } catch (HttpResponseException e) {
+            throw new UserException(e.getMessage());
+        }
+        if (vRetVal == null)
+            throw new UserException("Usuário ou senha inválidos.");
+        if (vRetVal.getStatus() == null || !vRetVal.getStatus().equals("OK"))
+            throw new UserException("Login/Senha Inválido.");
+
         return vRetVal;
     }
 
