@@ -26,6 +26,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -97,6 +98,17 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
         String SettingsPassword = settings.getString("password", null);
 
         mChkSave.setChecked(checked);
+        mChkSave.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                SharedPreferences.Editor editor = settings.edit();
+
+                editor.putBoolean("checkSave",b);
+                // Commit the edits!
+                editor.commit();
+            }
+        });
 
         if (checked) {
             if (SettingsUsername != null)
