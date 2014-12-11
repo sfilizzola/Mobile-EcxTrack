@@ -9,8 +9,8 @@ android {
         applicationId 'dev.ecxtrack.mobiletrack'
         minSdkVersion 14
         targetSdkVersion 19
-        versionCode 8
-        versionName '1.3'
+        versionCode 10
+        versionName '1.5'
     }
     buildTypes {
         ECXTrackMobile {
