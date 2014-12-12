@@ -262,8 +262,11 @@ public class Main extends FragmentActivity
     private void setUpMap() {
         if (mLocationClient.isConnected()) {
             mCurrentLocation = mLocationClient.getLastLocation();
-            mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 16.0f));
+            if (mCurrentLocation != null && mMap != null)
+            {
+                mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(mCurrentLocation.getLatitude(), mCurrentLocation.getLongitude()), 16.0f));
+            }
         } else {
             //Local da  sede da ECX card
             mMap.animateCamera(CameraUpdateFactory.zoomTo(15.0f));
