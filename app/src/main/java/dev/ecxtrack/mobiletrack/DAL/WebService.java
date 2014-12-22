@@ -212,21 +212,23 @@ public class WebService {
             Log.e(TAG, "Erro HttpTransportSE: "+ e.getMessage());
         }
 
-
         List<Evento> vRet = new ArrayList<Evento>();
-        SoapObject result = (SoapObject)envelope.getResponse();
 
-        for(int i= 0; i< result.getPropertyCount(); i++){
+        if (envelope.getResponse() != null) {
+            SoapObject result = (SoapObject) envelope.getResponse();
 
-            Evento oEvento = new Evento();
+            for (int i = 0; i < result.getPropertyCount(); i++) {
 
-            SoapObject object = (SoapObject)result.getProperty(i);
+                Evento oEvento = new Evento();
 
-            oEvento.setHodometro(Integer.parseInt(object.getPropertyAsString("Hodometro")));
-            oEvento.setLatitude(Double.parseDouble(object.getPropertyAsString("Latitude")));
-            oEvento.setLongitude(Double.parseDouble(object.getPropertyAsString("Longitude")));
-            oEvento.setDataEvento(new DateTime(object.getPropertyAsString("DataEvento")));
-            vRet.add(oEvento);
+                SoapObject object = (SoapObject) result.getProperty(i);
+
+                oEvento.setHodometro(Integer.parseInt(object.getPropertyAsString("Hodometro")));
+                oEvento.setLatitude(Double.parseDouble(object.getPropertyAsString("Latitude")));
+                oEvento.setLongitude(Double.parseDouble(object.getPropertyAsString("Longitude")));
+                oEvento.setDataEvento(new DateTime(object.getPropertyAsString("DataEvento")));
+                vRet.add(oEvento);
+            }
         }
         return vRet;
     }

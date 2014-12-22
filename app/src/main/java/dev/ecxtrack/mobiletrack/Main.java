@@ -97,11 +97,25 @@ public class Main extends FragmentActivity
     public void onNavigationDrawerItemSelected(int position) {
 
         progress = ProgressDialog.show(this, "Carregando posição", "Aguarde...", true);
-        Veiculo oVeiculoSelecionado = App.getoVeiculosAtuais().get(position);
-        App.setoVeiculoSelecionado(oVeiculoSelecionado);
-        mPositionTask = new VeiculosPositionTask(oVeiculoSelecionado);
-        mPositionTask.execute();
-        mTitle = oVeiculoSelecionado.getPlaca();
+        if (App.getoVeiculosAtuais() != null) {
+            Veiculo oVeiculoSelecionado = App.getoVeiculosAtuais().get(position);
+            App.setoVeiculoSelecionado(oVeiculoSelecionado);
+            mPositionTask = new VeiculosPositionTask(oVeiculoSelecionado);
+            mPositionTask.execute();
+            mTitle = oVeiculoSelecionado.getPlaca();
+        } else {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setIcon(android.R.drawable.ic_dialog_info);
+            dialog.setTitle("Atenção");
+            dialog.setMessage(getString(R.string.expired_session));
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+            dialog.create().show();
+        }
     }
 
     @Override
