@@ -479,7 +479,7 @@ public class Main extends FragmentActivity
 
         @Override
         protected void onPostExecute(List<Evento> result) {
-            progress.dismiss();            
+            progress.dismiss();
             setUpLines(result, true, true);
         }
 
