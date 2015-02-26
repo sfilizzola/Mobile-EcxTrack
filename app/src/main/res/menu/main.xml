@@ -5,10 +5,10 @@
         android:title="@string/action_refresh"
         android:icon="@drawable/ic_action_refresh"
         android:showAsAction="always" />
-    <!--<item android:id="@+id/action_anchor"
+    <item android:id="@+id/action_anchor"
         android:title="@string/action_anchor"
         android:icon="@drawable/ic_action_anchor"
-        android:showAsAction="ifRoom" />-->
+        android:showAsAction="ifRoom" />
     <item android:id="@+id/action_route"
         android:title="@string/action_route"
         android:icon="@drawable/ic_action_directions"
@@ -20,5 +20,13 @@
     <item android:id="@+id/action_find"
         android:title="@string/action_find"
         android:icon="@drawable/ic_action_help"
+        android:showAsAction="ifRoom" />
+    <item android:id="@+id/action_help"
+        android:title="@string/action_help"
+        android:icon="@drawable/ic_action_about"
+        android:showAsAction="ifRoom" />
+    <item android:id="@+id/action_feedback"
+        android:title="@string/action_feedback"
+        android:icon="@drawable/ic_action_chat"
         android:showAsAction="ifRoom" />
 </menu>

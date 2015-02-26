@@ -160,10 +160,20 @@ public class Main extends FragmentActivity
             mPositionTask.execute();
         }
 
-       /* if (item.getItemId() == R.id.action_anchor) {
+        if (item.getItemId() == R.id.action_anchor) {
             Toast.makeText(this, "Anchor.", Toast.LENGTH_SHORT).show();
             return true;
-        }*/
+        }
+
+        if (item.getItemId() == R.id.action_help) {
+            Toast.makeText(this, "Ajuda.", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        if (item.getItemId() == R.id.action_feedback) {
+            Toast.makeText(this, "Fale Conosco.", Toast.LENGTH_SHORT).show();
+            return true;
+        }
 
         if (item.getItemId() == R.id.action_find) {
             TracaCaminhoUsuarioLocalAteCarroSelecionado(App.getoVeiculoSelecionado());

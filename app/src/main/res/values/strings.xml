@@ -11,6 +11,8 @@
     <string name="action_find">Rota Até o Carro</string>
     <string name="action_refresh">Atualizar</string>
     <string name="action_anchor">Âncora</string>
+    <string name="action_help">Ajuda</string>
+    <string name="action_feedback">Fale Conosco</string>
     <string name="action_route">Trajetos</string>
     <string name="action_logout">Sair</string>
     <string name="title_activity_map">Map</string>
