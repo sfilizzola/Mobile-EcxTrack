@@ -56,12 +56,6 @@ public class Login extends DataAccessLayerBase {
             oUsu.setSenha(DbReader.getString("Senha"));
             oUsu.setCodUsuario(DbReader.getInt("CodUsuario"));
             oUsu.setStatus("Banco");
-
-            //TODO - Faz função para recupperação de cliente
-            //oUsu.setCliente(DbReader.getInt("CPF"));
-
-            //TODO - Faz função para recupperação de perfil
-            //oUsu.setPerfil(DbReader.getIntOrNull("CPF"));
         }
         DbReader.close();
 

@@ -98,11 +98,25 @@ public class Main extends FragmentActivity
 
         progress = ProgressDialog.show(this, "Carregando posição", "Aguarde...", true);
         if (App.getoVeiculosAtuais() != null) {
-            Veiculo oVeiculoSelecionado = App.getoVeiculosAtuais().get(position);
-            App.setoVeiculoSelecionado(oVeiculoSelecionado);
-            mPositionTask = new VeiculosPositionTask(oVeiculoSelecionado);
-            mPositionTask.execute();
-            mTitle = oVeiculoSelecionado.getPlaca();
+            try {
+                Veiculo oVeiculoSelecionado = App.getoVeiculosAtuais().get(position);
+                App.setoVeiculoSelecionado(oVeiculoSelecionado);
+                mPositionTask = new VeiculosPositionTask(oVeiculoSelecionado);
+                mPositionTask.execute();
+                mTitle = oVeiculoSelecionado.getPlaca();
+            } catch (IndexOutOfBoundsException Exception){
+                AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+                dialog.setIcon(android.R.drawable.ic_dialog_info);
+                dialog.setTitle("Atenção");
+                dialog.setMessage(getString(R.string.expired_session));
+                dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                });
+                dialog.create().show();
+            }
         } else {
             AlertDialog.Builder dialog = new AlertDialog.Builder(this);
             dialog.setIcon(android.R.drawable.ic_dialog_info);
@@ -161,16 +175,19 @@ public class Main extends FragmentActivity
         }
 
         if (item.getItemId() == R.id.action_anchor) {
+            // TODO - abre tela com valores do raio em torno do carro selecioando, desenha raio ( medo demais ) manda pro servidor. Prepara aplicação para receber push
             Toast.makeText(this, "Anchor.", Toast.LENGTH_SHORT).show();
             return true;
         }
 
         if (item.getItemId() == R.id.action_help) {
+            //TODO - tutorial em imagem
             Toast.makeText(this, "Ajuda.", Toast.LENGTH_SHORT).show();
             return true;
         }
 
         if (item.getItemId() == R.id.action_feedback) {
+            //TODO - Dialog view com as tres opções, após isso cada tela individual "nubak"
             Toast.makeText(this, "Fale Conosco.", Toast.LENGTH_SHORT).show();
             return true;
         }
@@ -269,17 +286,31 @@ public class Main extends FragmentActivity
 
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
-        if (mMap == null) {
-            // Try to obtain the map from the SupportMapFragment.
-            mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                    .getMap();
-            // Check if we were successful in obtaining the map.
-            if (mMap != null) {
-                SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-                int mapType = settings.getInt("MapType", GoogleMap.MAP_TYPE_NORMAL);
-                mMap.setMapType(mapType);
-                setUpMap();
+        try {
+            if (mMap == null) {
+                // Try to obtain the map from the SupportMapFragment.
+                mMap = ((SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
+                        .getMap();
+                // Check if we were successful in obtaining the map.
+                if (mMap != null) {
+                    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                    int mapType = settings.getInt("MapType", GoogleMap.MAP_TYPE_NORMAL);
+                    mMap.setMapType(mapType);
+                    setUpMap();
+                }
             }
+        } catch (NullPointerException Exception){
+            AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+            dialog.setIcon(android.R.drawable.ic_dialog_info);
+            dialog.setTitle("Atenção");
+            dialog.setMessage(getString(R.string.expired_session));
+            dialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    finish();
+                }
+            });
+            dialog.create().show();
         }
     }
 
