@@ -5,7 +5,7 @@ import android.content.Context;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import dev.ecxtrack.mobiletrack.App;
+import dev.ecxtrack.ecxtrack.App;
 
 public class DialogUtil 
 {

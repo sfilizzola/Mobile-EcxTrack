@@ -4,7 +4,7 @@ package dev.sfilizzola.data;
 
 import java.util.Date;
 
-import dev.ecxtrack.mobiletrack.App;
+import dev.ecxtrack.ecxtrack.App;
 import dev.sfilizzola.data.DataParameter.DataType;
 import dev.sfilizzola.utils.Log;
 

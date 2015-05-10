@@ -7,4 +7,14 @@
         <item>Terreno</item>
         <item>Híbrido</item>
     </string-array>
+
+    <string-array
+        name="raios_ancora">
+        <item>100m</item>
+        <item>200m</item>
+        <item>300m</item>
+        <item>500m</item>
+        <item>1km</item>
+    </string-array>
+
 </resources>

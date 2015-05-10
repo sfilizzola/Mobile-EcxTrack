@@ -20,7 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
    * Este é o endereço onde o android salva os bancos de dados criado pela aplicação,
    * /data/data/<namespace da aplicacao>/databases/
    */
-  public static String DBPATH = "/data/data/dev.ecxtrack.mobiletrack/databases/";
+  public static String DBPATH = "/data/data/dev.ecxtrack.ecxtrack/databases/";
 
   // Este é o nome do banco de dados que iremos utilizar
   public static String DBNAME = "EcxTrack.s3db";

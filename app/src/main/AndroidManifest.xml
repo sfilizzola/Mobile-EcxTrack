@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.ecxtrack.mobiletrack" >
+    package="dev.ecxtrack.ecxtrack" >
 
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
 
     <application
-        android:name=".App"
+        android:name="dev.ecxtrack.ecxtrack.App"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".LoginActivity"
+            android:name="dev.ecxtrack.ecxtrack.LoginActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize|stateVisible"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar">
@@ -24,12 +24,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Main"
+            android:name="dev.ecxtrack.ecxtrack.Main"
             android:label="@string/title_activity_main"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".Map"
+            android:name="dev.ecxtrack.ecxtrack.Map"
             android:label="@string/title_activity_map" >
         </activity>
 
@@ -41,7 +41,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".LoadingAct"
+            android:name="dev.ecxtrack.ecxtrack.LoadingAct"
             android:label="@string/title_activity_loading"
             android:theme="@android:style/Theme.Holo.Light.NoActionBar"
             android:noHistory="true">

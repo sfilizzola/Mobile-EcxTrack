@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import dev.ecxtrack.mobiletrack.App;
+import dev.ecxtrack.ecxtrack.App;
 
 public class Resources {
 
