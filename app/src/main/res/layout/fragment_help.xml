@@ -1,0 +1,53 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context="app.desenvolvimento.ECXSaldo.HelpFragment">
+
+        <Button
+            android:id="@+id/btnChat"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:drawableStart="@drawable/chat"
+            android:drawableLeft="@drawable/chat"
+            android:textSize="20dp"
+            android:text="Chat"
+            style="?android:attr/borderlessButtonStyle"/>
+
+       <Button
+            android:id="@+id/btnTelefone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:drawableStart="@drawable/phone"
+            android:drawableLeft="@drawable/phone"
+           android:textSize="20dp"
+            android:text="(31)3279-0062"
+            style="?android:attr/borderlessButtonStyle"/>
+
+        <Button
+            android:id="@+id/btnEmail"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:drawableStart="@drawable/mail"
+            android:drawableLeft="@drawable/mail"
+            android:textSize="20dp"
+            android:text="E-mail"
+            style="?android:attr/borderlessButtonStyle"/>
+
+        <Button
+            android:id="@+id/btnGuia"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:drawableStart="@drawable/guia"
+            android:drawableLeft="@drawable/guia"
+            android:textSize="20dp"
+            android:text="Como usar o aplicativo"
+            style="?android:attr/borderlessButtonStyle"/>
+
+
+</LinearLayout>
