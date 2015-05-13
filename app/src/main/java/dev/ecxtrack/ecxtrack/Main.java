@@ -307,7 +307,10 @@ public class Main extends FragmentActivity
                         public void onClick(DialogInterface dialog, int which) {
 
                             if (circuloAncora != null)
+                            {
                                 circuloAncora.remove();
+                                circuloAncora = null;
+                            }
 
                             //TODO - Insere chamado webservice da âncora para cancelamento
                         }
