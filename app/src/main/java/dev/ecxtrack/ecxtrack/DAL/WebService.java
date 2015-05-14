@@ -233,6 +233,77 @@ public class WebService {
         return vRet;
     }
 
+    public int NovaAncora(int CodEvento, int CodUsuario, int Raio) throws XmlPullParserException, HttpResponseException, SoapFault
+    {
+        SOAP_ACTION = "http://tempuri.org/IRestService/InsereAncora";
+        METHOD_NAME = "InsereAncora";
+
+        //Define Objeto SOAP
+        SoapObject soap = new SoapObject(NAMESPACE, METHOD_NAME);
+        soap.addProperty("CodEvento", CodEvento);
+        soap.addProperty("CodUsuario", CodUsuario);
+        soap.addProperty("Raio", Raio);
+
+        //cria envelope
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(soap);
+        Log.i(TAG, "Chamando Webservice: " + URL);
+        //Cria HTTPTransport para enviar os dados (SOAP)
+
+        //Evento de resultado
+        int IdAncora = 0;
+
+        HttpTransportSE httpTransport = new HttpTransportSE(URL);
+        try {
+            httpTransport.call(SOAP_ACTION, envelope);
+
+            SoapObject resposta = (SoapObject)envelope.bodyIn;
+
+            if (resposta != null)
+                 IdAncora = Integer.parseInt(resposta.getPropertyAsString(0));
+
+        }catch (Exception e){
+            Log.e(TAG, "Erro HttpTransportSE: "+ e.getMessage());
+        }
+        return IdAncora;
+    }
+
+    public String CancelarAncora(int IdAncora)throws XmlPullParserException, HttpResponseException, SoapFault
+    {
+        SOAP_ACTION = "http://tempuri.org/IRestService/CancelarAncora";
+        METHOD_NAME = "CancelarAncora";
+
+        //Define Objeto SOAP
+        SoapObject soap = new SoapObject(NAMESPACE, METHOD_NAME);
+        soap.addProperty("IdAncora", IdAncora);
+
+        //cria envelope
+        SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
+        envelope.dotNet = true;
+        envelope.setOutputSoapObject(soap);
+        Log.i(TAG, "Chamando Webservice: " + URL);
+        //Cria HTTPTransport para enviar os dados (SOAP)
+
+        //Evento de resultado
+        String CancResposta = null;
+
+        HttpTransportSE httpTransport = new HttpTransportSE(URL);
+        try {
+            httpTransport.call(SOAP_ACTION, envelope);
+
+            SoapObject resposta = (SoapObject)envelope.bodyIn;
+
+            if (resposta != null)
+                CancResposta = (resposta.getPropertyAsString(0));
+
+        }catch (Exception e){
+            Log.e(TAG, "Erro HttpTransportSE: "+ e.getMessage());
+        }
+
+        return CancResposta;
+    }
+
 
     /*
         -------------------- RESPOSTA VEICULO --------------------------

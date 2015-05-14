@@ -32,6 +32,14 @@ public class Veiculos implements IDisposable {
        return oVeiculoDAL.Trajetos(pDataInicial, pDataFinal, pCodVeiculo);
    }
 
+    public int NovaAncora(int CodEvento, int CodUsuario, int Raio){
+        return oVeiculoDAL.NovaAncora(CodEvento, CodUsuario, Raio);
+    }
+
+    public String CancelarAncora(int IdAncora){
+        return oVeiculoDAL.CancelarAncora(IdAncora);
+    }
+
     @Override
     public void Dispose() {
         if (oVeiculoDAL != null)

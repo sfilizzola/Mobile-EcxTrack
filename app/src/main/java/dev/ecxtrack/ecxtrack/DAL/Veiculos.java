@@ -130,4 +130,35 @@ public class Veiculos extends DataAccessLayerBase{
         return null;
 
     }
+
+
+    public int NovaAncora(int CodEvento, int CodUsuario, int Raio){
+
+        WebService ws = new WebService();
+        try {
+            return ws.NovaAncora(CodEvento, CodUsuario, Raio);
+        } catch (XmlPullParserException e) {
+            Log.e(TAG, e.getMessage());
+        } catch (HttpResponseException e) {
+            Log.e(TAG, e.getMessage());
+        } catch (SoapFault soapFault) {
+            Log.e(TAG, soapFault.getMessage());
+        }
+        return 0;
+    }
+
+    public String CancelarAncora(int IdAncora){
+
+        WebService ws = new WebService();
+        try {
+            return ws.CancelarAncora(IdAncora);
+        } catch (XmlPullParserException e) {
+            Log.e(TAG, e.getMessage());
+        } catch (HttpResponseException e) {
+            Log.e(TAG, e.getMessage());
+        } catch (SoapFault soapFault) {
+            Log.e(TAG, soapFault.getMessage());
+        }
+        return null;
+    }
 }

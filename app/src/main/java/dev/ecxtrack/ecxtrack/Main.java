@@ -60,6 +60,8 @@ public class Main extends FragmentActivity
 
     private TrajetosTask mTrajTask;
 
+    private NovaAncoraTask mAnchorTask;
+
     private ProgressDialog progress;
 
     private LocationClient mLocationClient;
@@ -71,6 +73,10 @@ public class Main extends FragmentActivity
     private Menu mMenu;
 
     private Circle circuloAncora;
+
+    private CircleOptions circleOptions;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -281,14 +287,18 @@ public class Main extends FragmentActivity
 
                                 LatLng centroAtual = new LatLng(oEventoAtual.getLatitude(), oEventoAtual.getLongitude());
 
-                                CircleOptions circleOptions = new CircleOptions()
+                                circleOptions = new CircleOptions()
                                         .center(centroAtual)
                                         .radius(RADIUS) // In meters
                                         .strokeColor(Color.BLUE)
+                                        .strokeWidth(1)
                                         .fillColor(Color.argb(80, 0, 0, 100));
                                 circuloAncora = mMap.addCircle(circleOptions);
 
-                                //TODO - Insere chamado webservice da âncora para criação
+                                //Chamado do Task de criação de ancora.
+                                progress = ProgressDialog.show(Main.this, "Ativando âncora", "Aguarde...", true);
+                                mAnchorTask = new NovaAncoraTask(oEventoAtual.getCodEvento(), App.getoUsuarioLogado().getCodUsuario(), RADIUS);
+                                mAnchorTask.execute();
 
                             } else {
                                 Toast.makeText(getApplicationContext(), "Nenhum carro selecionado para setar uma âncora.", Toast.LENGTH_SHORT).show();
@@ -310,9 +320,19 @@ public class Main extends FragmentActivity
                             {
                                 circuloAncora.remove();
                                 circuloAncora = null;
+                                mAnchorTask = null;
                             }
 
-                            //TODO - Insere chamado webservice da âncora para cancelamento
+                            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+                            int IdAnchor = settings.getInt("IdAnchor", 0);
+
+                            if(IdAnchor != 0) // EXISTE ANCORA
+                            {
+                                Veiculos VeicBLL = new Veiculos();
+                                VeicBLL.CancelarAncora(IdAnchor);
+                                VeicBLL.Dispose();
+                            }
+                            AtualizaPosicao();
                         }
                     })
                     .setNegativeButton(android.R.string.no, null)
@@ -425,6 +445,11 @@ public class Main extends FragmentActivity
         oMarcador.snippet("Data: " + pEvento.getDataEvento().toString("dd/MM/YYYY HH:mm:ss"));
         //Adiciona Marcador
         mMap.addMarker(oMarcador);
+
+        //seta circulo da ancora
+        if (circuloAncora != null){
+            mMap.addCircle(circleOptions);
+        }
 
     }
 
@@ -602,6 +627,42 @@ public class Main extends FragmentActivity
             setUpLines(result, true, true);
         }
 
+    }
+
+    public class NovaAncoraTask extends AsyncTask<Void, Void, Integer>{
+
+        private int CodEvento;
+        private int Codusuario;
+        private int Raio;
+
+        public NovaAncoraTask(int codEvento, int codusuario, int raio) {
+            CodEvento = codEvento;
+            Codusuario = codusuario;
+            Raio = raio;
+        }
+
+        @Override
+        protected Integer doInBackground(Void... params) {
+
+            Veiculos BLLVeiculos = new Veiculos();
+            int IdAnchor = BLLVeiculos.NovaAncora(CodEvento, Codusuario, Raio);
+            BLLVeiculos.Dispose();
+
+           return IdAnchor;
+        }
+
+        @Override
+        protected void onPostExecute(Integer result) {
+
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+
+            editor.putInt("IdAnchor", result);
+            // Commit the edits!
+            editor.commit();
+
+            progress.dismiss();
+        }
     }
 
     @Override

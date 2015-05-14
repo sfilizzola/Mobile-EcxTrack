@@ -5,7 +5,7 @@ android {
         debug {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
-            storeFile file('E:/Key/debug.keystore')
+            storeFile file('d:/Key/debug.keystore')
             storePassword 'android'
         }
     }
@@ -15,8 +15,8 @@ android {
         applicationId 'dev.ecxtrack.ecxtrack'
         minSdkVersion 16
         targetSdkVersion 19
-        versionCode 14
-        versionName '1.9'
+        versionCode 15
+        versionName '1.10'
     }
     buildTypes {
         ECXTrackMobile {
