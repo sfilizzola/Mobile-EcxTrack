@@ -1,6 +1,21 @@
 
 package dev.ecxtrack.ecxtrack;
 
+import android.app.Activity;
+import android.app.Application;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+
+import com.parse.Parse;
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
+import com.parse.SaveCallback;
+
+import org.joda.time.DateTime;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -13,14 +28,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Locale;
-
-import org.joda.time.DateTime;
-import android.app.Activity;
-import android.app.Application;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 
 import dev.ecxtrack.ecxtrack.Entidades.Evento;
 import dev.ecxtrack.ecxtrack.Entidades.Usuario;
@@ -113,8 +120,23 @@ public class App extends Application {
     public void onCreate() {
 
         super.onCreate();
-
         appContext = this;
+
+        //Instalacao Parse
+        Parse.initialize(this, "hrXOihZn1s2Ve8OIeHVcmKDk86jIMBz9AKYlxFXA", "SCRAP68KGLAzdkwqQaUGhRUWmKXt8Td05ujS63GD");
+        ParseInstallation.getCurrentInstallation().saveInBackground();
+
+        ParsePush.subscribeInBackground("", new SaveCallback() {
+            @Override
+            public void done(com.parse.ParseException e) {
+                if (e == null) {
+                    Log.d("com.parse.push", "successfully subscribed to the broadcast channel.");
+                } else {
+                    Log.e("com.parse.push", "failed to subscribe for push", e);
+                }
+            }
+        });
+
     }
 
 

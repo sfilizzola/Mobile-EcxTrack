@@ -157,6 +157,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor>{
             cancel = true;
         }
 
+        if (!checkSave){
+            mEmailView.setText("");
+            mPasswordView.setText("");
+        }
+
         if (cancel) {
             // There was an error; don't attempt login and focus the first
             // form field with an error.

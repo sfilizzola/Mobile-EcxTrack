@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.helpshift.Helpshift;
+import com.parse.ParseInstallation;
 
 import org.joda.time.DateTime;
 
@@ -96,6 +97,13 @@ public class Main extends FragmentActivity
 
         //instalaçao HelpShift
         Helpshift.install(getApplication(), "a21a303c81649ab4857be952523837ff", "ecxtrack.helpshift.com", "ecxtrack_platform_20150507194408005-f07857714d1ba78");
+
+
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("CodUsuario", App.getoUsuarioLogado().getCodUsuario());
+        installation.saveInBackground();
+
+
     }
 
     @Override
